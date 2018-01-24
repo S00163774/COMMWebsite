@@ -307,3 +307,47 @@ C:\Users\Conor\Desktop\HairSalon Website\HairSalon Website\bin\System.Web.WebPag
 C:\Users\Conor\Desktop\HairSalon Website\HairSalon Website\obj\Debug\HairSalon Website.csprojResolveAssemblyReference.cache
 C:\Users\Conor\Desktop\HairSalon Website\HairSalon Website\obj\Debug\HairSalon Website.dll
 C:\Users\Conor\Desktop\HairSalon Website\HairSalon Website\obj\Debug\HairSalon Website.pdb
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\ApplicationInsights.config
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\csc.exe
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\vbc.exe
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\VBCSCompiler.exe
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\HairSalon Website.dll.config
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\HairSalon Website.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\HairSalon Website.pdb
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.Web.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.ApplicationInsights.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.Helpers.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.Razor.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Deployment.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Razor.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.Web.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.ApplicationInsights.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.Helpers.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.Razor.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Deployment.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Razor.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.csprojResolveAssemblyReference.cache
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.pdb
