@@ -15,7 +15,7 @@ namespace HairSalon_Website
     {
         const string DatabaseConnection = "Server=tcp:boothserver.database.windows.net,1433;" +
         "Initial Catalog=boothtest;Persist Security Info=False;" +
-        "User ID=S00163774;Password=BOOTHserver%163774;" +
+        "User ID=S00163774;Password=BOOTHserver%;" +
         "MultipleActiveResultSets=False;Encrypt=True;" +
         "TrustServerCertificate=False;Connection Timeout=30;";
 
