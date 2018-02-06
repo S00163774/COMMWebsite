@@ -1,22 +1,4 @@
-﻿@using HairSalon_Website;
-@{
-    if (IsPost)
-    {
-        Checkout deets = new Checkout();
-        deets.Name = Request.Form["name"];
-        deets.Phone = Request.Form["phone"];
-        deets.Postcode = Request.Form["postcode"];
-        deets.Address1 = Request.Form["address1"];
-        deets.Address2 = Request.Form["address2"];
-        deets.Email = Request.Form["email"];
-
-        Session["deets"] = deets;
-
-        Response.Redirect("ConfirmationPage.cshtml");
-    }
-
-}
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
@@ -278,12 +260,10 @@
                     <h3>Shipping Address</h3>
                     <div class="form-group ">
                         <label for="name" class="sr-only">Full Name</label>
-                        @Html.ValidationMessage("name")
                         <input id="name" name="name" class="form-control" placeholder="John Doe" type="text" required>
                     </div>
                     <div class="form-group ">
                         <label for="email" class="sr-only">Email</label>
-                        @Html.ValidationMessage("email")
                         <input id="email" name="email" class="form-control" placeholder="Example@hotmail.com" type="email" required>
                     </div>
                     <div class="form-group ">
@@ -296,7 +276,7 @@
                     </div>
                     <div class="form-group ">
                         <label for="county" class="sr-only">County</label>
-                        <input id="county" name="county" class="form-control" value="Sligo" type="text" required readonly>
+                        <input id="county" name="county" class="form-control" value="Sligo" type="text" readonly>
                     </div>
                     <div class="form-group ">
                         <label for="PostCode" class="sr-only">Post Code</label>
@@ -304,7 +284,6 @@
                     </div>
                     <div class="form-group ">
                         <label for="phone" class="sr-only">Phone</label>
-                        @Html.ValidationMessage("phone")
                         <input id="phone" name="phone" class="form-control" placeholder="Phone" type="text" required>
                     </div>
                 </div>
@@ -313,41 +292,36 @@
                     <h3>Payment Details</h3>
                     <div class="form-group ">
                         <label for="fullname" class="sr-only">Full Name</label>
-                        @Html.ValidationMessage("fullname")
-                        <input id="fullname" name="fullname" class="form-control" placeholder="John Doe" type="text" required>
+                        <input id="fullname" name="fullname" class="form-control" placeholder="John Doe" type="text">
                     </div>
                     <div class="form-group ">
                         <label for="cardNumber" class="sr-only">Card Number</label>
-                        @Html.ValidationMessage("cardNumber")
-                        <input id="cardNumber" name="cardNumber" class="form-control" placeholder="Card Number" type="text" required>
+                        <input id="cardNumber" name="cardNumber" class="form-control" placeholder="Card Number" type="text">
                     </div>
                     <div class="form-group ">
                         <div class="col-xs-3">
-                            <label for="exMonth" class="sr-only">Expiry Month</label>
-                            @Html.ValidationMessage("exMonth")
-                            <input id="exMonth" name="exMonth" class="form-control" placeholder="MM" type="text" required>
+                            <label for="exMonth" class="sr-only" style="margin:1em;">Expiry Month</label>
+                            <input id="exMonth" name="exMonth" class="form-control" placeholder="MM" type="text">
                         </div>
                     </div>
                     <div class="form-group ">
                         <div class="col-xs-3">
                             <label for="exYear" class="sr-only">Expiry Year</label>
-                            @Html.ValidationMessage("exYear")
-                            <input id="exYear" name="exYear" class="form-control" placeholder="YY" type="text" required>
+                            <input id="exYear" name="exYear" class="form-control" placeholder="YY" type="text">
                         </div>
                     </div>
 
                     <div id="myDiv">
                         <div class="form-group ">
-                            <button type="button" id="payBtn" class="btn btn-success" onclick="javascript: window.location.href = '#'; return false;">Proceed with Payment</button>
-                            @*<input class="btn btn-primary btn-lg" id="payBtn" value="Proceed To Pay" type="submit">*@
+                            <input class="btn btn-primary btn-lg" id="payBtn" value="Proceed To Payment" readonly>
                         </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        </div>
-        </div>
+        @*</div>
+            </div>*@
         @*<div id="map" class="to-animate"></div>*@
     </section>
 
@@ -426,7 +400,7 @@
     <!-- Magnific Popup -->
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/magnific-popup-options.js"></script>
-    <script src="js/ProgrammerDefined.js"></script>
+    <script src="js/programmerDefined.js"></script>
     <!-- Google Map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
     <script src="js/google_map.js"></script>
@@ -448,6 +422,8 @@
             $('.option-toggle').click(function () {
                 $('#colour-variations').toggleClass('sleep');
             });
+
+            document.getElementById('payBtn').addEventListener("click", ConfirmationPage, false);
         });
     </script>
     <!-- End demo purposes only -->
@@ -456,5 +432,3 @@
 
 </body>
 </html>
-
-

@@ -25,9 +25,11 @@
         basketValue++;
     }
 
+    //function () {
+    //    window.location.href = "ConfirmationPage.cshtml";
+
     document.getElementById('updateBasket').addEventListener("click", UpdateCart, false);
     document.getElementById('checkoutBtn').addEventListener("click", CheckoutPage, false);
-    document.getElementById('payBtn').addEventListener("click", ConfirmPage, false);
 })();
 
 function minusQuantity(clicked_id) {
@@ -101,14 +103,27 @@ function GetKeys() { // Gets all keys in session storage and stores them in loca
 
 function CartDisplay() {
     var totalPrice = 0;
+
     var collectiveProducts = localStorage.getItem("allKeys");
     //alert(collectiveProducts);
     var keys = collectiveProducts.split(',');
 
+    var realKeys = [];
+    var realCounter = 0;
+
+    for (var a = 0; a < keys.length; a++) {
+        if (keys[a].startsWith('basketItem')) {
+            realKeys[realCounter] = keys[a];
+            realCounter++;
+        }
+    }
+
+    //alert(realKeys.length);
+
     var counter = 1;
     // Display each product in the basket here
-    for (var i = 0; i < keys.length; i++) {
-        var prod = sessionStorage.getItem(keys[i]);
+    for (var i = 0; i < realKeys.length; i++) {
+        var prod = sessionStorage.getItem(realKeys[i]);
         prod = JSON.parse(prod);
         $("div.panel-body").append('<div class="row"><div class="col-xs-2"><img class="img-responsive" src="http://placehold.it/100x70"></div><div class="col-xs-4"><h4 class="product-name"><strong>' + prod.Name + '</strong></h4><h4><small>' + prod.Description + '</small></h4></div><div class="col-xs-6"><div class="col-xs-6 text-right"><h6><strong><div class="pricedProds">' + prod.Price + '</div><span class="text-muted"> x</span></strong></h6></div><div class="col-xs-4"><input type="text" name="basketProds" class="form-control input-sm" value="' + prod.Quantity + '"></div><div class="col-xs-2"><button type="button" class="btn btn-link btn-xs" onclick="RemoveItem(' + prod.ID + ')"><span class="glyphicon glyphicon-trash"> </span></button></div></div></div>');
         var price = prod.Price * prod.Quantity;
@@ -155,16 +170,78 @@ function PriceGetter() {
     sessionStorage.setItem("price", JSON.stringify(price));
 }
 
+//function GetTotalPrice() {
+//    $(".btn btn-success.btn-block")
+//}
+
 function CheckoutPage() { // Sends to the checkout page
     PriceGetter();
 
     window.location.href = "checkout.cshtml";
 }
 
-function PayPage() {
-    window.location.href = 'pay.cshtml';
+function ConfirmationPage() {
+    ShippingDetails();
+
+    window.location.href = 'ConfirmationPage.cshtml';
 }
 
-function ConfirmPage() {
-    window.location.href = 'ConfirmationPage.cshtml';
+function OrderDetails(temp) { // Model for each product in the basket
+    this.Name = temp[0];
+    this.Email = temp[1];
+    this.Address1 = temp[2];
+    this.Address2 = temp[3]
+    this.postCode = temp[4];
+
+}
+
+function ShippingDetails() {
+    var name = $('#name').val();
+    var email = $('#email').val();
+    var address1 = $('#Address1').val();
+    var postCode = $('#PostCode').val();
+
+    var details;
+
+    if ($('#Address2').val() != null) {
+        var address2 = $('#Address2').val();
+        details = [name, email, address1, address2, postCode];
+    }
+    else {
+
+        details = [name, email, address1, " ", postCode];
+    }
+
+    var deets = new OrderDetails(details);
+
+    sessionStorage.setItem('details', JSON.stringify(deets));
+}
+
+function ShowDetails() {
+    // Get shipping details of customer from sesiion storage  
+    var details = JSON.parse(sessionStorage.getItem('details'));
+    // Get all the keys that are in session storage 
+    var collectiveProducts = localStorage.getItem("allKeys");
+    //alert(collectiveProducts);
+    var keys = collectiveProducts.split(',');
+    // Array for basket items only
+    var realKeys = [];
+    var realCounter = 0;
+    // Loop for separating the products from the rest of the items in session storage
+    for (var a = 0; a < keys.length; a++) {
+        if (keys[a].startsWith('basketItem')) {
+            realKeys[realCounter] = keys[a];
+            realCounter++;
+        }
+    }
+
+    for (var i = 0; i < realKeys.length; i++) {
+        var prod = sessionStorage.getItem(realKeys[i]);
+        prod = JSON.parse(prod);
+        $('#OrderDetails').append('<div>' + prod.Image + '</div><div><strong>' + prod.Name + '</strong></div> <div>Price: &euro;' + prod.Price + '</div>')
+    }
+
+    var postcd = details.postCode.toUpperCase();
+
+    $('#shippingAddress').after('<div><strong>' + details.Name + '</strong></div> <div><strong>' + details.Address1 + '</strong></div> <div><strong>' + details.Address2 + '</strong></div> <div><strong>Sligo</strong></div> <div><strong>' + postcd + '</strong></div> <div>Ireland</div>');
 }
