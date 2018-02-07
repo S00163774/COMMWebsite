@@ -5,7 +5,7 @@
     // Log In Checker ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     User userLoggedIn = (User)Session["HairSalonUser"];
 
-    if (Session["HairSalonUser"] == null || userLoggedIn.UserType != "Staff")
+    if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
     {
         Response.Redirect("~/login.cshtml");
     }
@@ -13,12 +13,6 @@
 
     List<Product> products = DatabaseControl.ReturnProducts();
     List<ProductCategory> ProductCategories = DatabaseControl.ReturnCategories();
-    Session["UserName"] = "Hello";
-
-    foreach (Product product in products)
-    {
-        Session["HairSalonProduct" + product.ProductID] = product;
-    }
 
     int categoryAdded = 0;
     int productAdded = 0;

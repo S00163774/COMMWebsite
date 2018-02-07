@@ -161,6 +161,7 @@
     <Content Include="checkout.cshtml" />
     <Content Include="ConfirmationPage.cshtml" />
     <Content Include="makeBookingPage.cshtml" />
+    <Content Include="managestylists.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -226,6 +227,7 @@
     <Folder Include=".sass-cache\62618027b4caf6f904bc1e6f3bba60bc346dd1e6\" />
     <Folder Include=".sass-cache\8ab364f78af8525cdac1e38bd6b084e3301cad88\" />
     <Folder Include=".sass-cache\c10237004de635a1a311b1d886625325ad84b598\" />
+    <Folder Include="admin\" />
     <Folder Include="fonts\bootstrap\" />
     <Folder Include="fonts\icomoon\" />
     <Folder Include="fonts\simple-line-icons\" />
