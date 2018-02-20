@@ -362,5 +362,43 @@ namespace HairSalon_Website
 
             return emailExists;
         }
+
+        // Statistic Control Methods
+
+        static public List<ProductOrderCount> ProductOrderCount()
+        {
+            List<ProductOrderCount> products = new List<ProductOrderCount>();
+
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            {
+                using (SqlCommand ProductsCMD = new SqlCommand("DataProductCountOrders", boothtest))
+                {
+                    ProductsCMD.CommandType = CommandType.StoredProcedure;
+
+                    boothtest.Open();
+
+                    SqlDataReader myReader = ProductsCMD.ExecuteReader();
+
+                    products = new List<ProductOrderCount>();
+
+                    while (myReader.Read())
+                    {
+                        ProductOrderCount product = new ProductOrderCount();
+
+                        product.ProductID = int.Parse(myReader["ID"].ToString());
+                        product.ProductName = myReader["Name"].ToString();
+                        product.NoOfOrders = int.Parse(myReader["NoOfOrders"].ToString());
+
+                        products.Add(product);
+                    }
+
+                    myReader.Close(); // Close Command
+
+                    boothtest.Close(); // Close Database Connection
+                }
+            }
+
+            return products;
+        }
     }
 }

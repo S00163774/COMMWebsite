@@ -141,6 +141,7 @@
     <Content Include="images\purple.jpg" />
     <Content Include="js\editform.js" />
     <Content Include="js\ProgrammerDefined.js" />
+    <Content Include="js\statistics.js" />
     <Content Include="js\toastr.min.js" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
@@ -162,6 +163,7 @@
     <Content Include="ConfirmationPage.cshtml" />
     <Content Include="makeBookingPage.cshtml" />
     <Content Include="managestylists.cshtml" />
+    <Content Include="statistics.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -215,6 +217,7 @@
   <ItemGroup>
     <Compile Include="class\DatabaseControl.cs" />
     <Compile Include="class\SalonObjects.cs" />
+    <Compile Include="class\StatisticObjects.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

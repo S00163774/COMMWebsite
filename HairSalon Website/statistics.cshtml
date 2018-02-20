@@ -6,7 +6,14 @@
 
     if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
     {
-        Response.Redirect("~/login.cshtml");
+        //Response.Redirect("~/login.cshtml");
+    }
+
+    List<ProductOrderCount> products = DatabaseControl.ProductOrderCount();
+    int totalOrders = 0;
+    foreach (ProductOrderCount product in products)
+    {
+        totalOrders += product.NoOfOrders;
     }
 
 }
@@ -96,15 +103,15 @@
                     <a class="navbar-brand" href="index.html">Hair Salon</a>
                 </div>
                 @*<div id="navbar" class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
-                        <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
-                        <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
-                        <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
-                        <li><a href="#" data-nav-section="about"><span>About</span></a></li>
-                        <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
-                    </ul>
-                </div>*@
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
+                            <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
+                            <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
+                            <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
+                            <li><a href="#" data-nav-section="about"><span>About</span></a></li>
+                            <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
+                        </ul>
+                    </div>*@
             </nav>
             <!-- </div> -->
         </div>
@@ -115,11 +122,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Welcome, @userLoggedIn.UserFirstName!</h2>
+                    <h2 class="to-animate">Statistics</h2>
                     <div class="row">
-                        <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>From this Admin Hub you can manage all aspects of the system</h3>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -128,72 +132,18 @@
     </section>
     <section id="fh5co-intro">
         <div class="container">
-            <div class="row row-bottom-padded-lg">
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_7.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-bulb"></i>
-                        <h2>Manage Store Products</h2>
-                        <p>Add, Remove or Edit Products for the Online Store</p>
-                        <p><a href="~/manageproduct.cshtml" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>Manage Store Orders</h2>
-                        <p>View all Orders made by customers in the Online Store, view products ordered and delivery details, prepare the package and confirm the order for delivery</p>
-                        <p><a href="#" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>Statistics</h2>
-                        <p>View Statistics on Product Sales, Popular Bookings and General Customers Details</p>
-                        <p><a href="~/statistics.cshtml" class="btn btn-primary">Statistics</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-bottom-padded-lg">
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_7.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-bulb"></i>
-                        <h2>Manage Stylists</h2>
-                        <p>Add or Remove Stylists on the system</p>
-                        <p><a href="~/managestylists.cshtml" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>Manage Styles</h2>
-                        <p>Add or Remove Styles/Services from the system, along with Style Categories</p>
-                        <p><a href="#" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_10.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-rocket"></i>
-                        <h2>View Timetable</h2>
-                        <p>View the Timetable for the upcoming days of work, what time each stylist is working and what service they are providing</p>
-                        <p><a href="#" class="btn btn-primary">View</a></p>
-                    </div>
-                </div>
-            </div>
+
+                <div id="ProductOrderCountChart" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto"></div>
+
         </div>
     </section>
+
+    @*ProductOrderCount*@
+    <input type="hidden" id="totalOrders" value="@totalOrders" />
+    @foreach (ProductOrderCount product in products)
+    {
+        <input type="hidden" name="ProductOrderCount" value="@product.ToString()" />
+    }
 
     <footer id="footer" role="contentinfo">
         <a href="#" class="gotop js-gotop"><i class="icon-arrow-up2"></i></a>
@@ -237,5 +187,10 @@
 
     <!-- Main JS (Do not remove) -->
     <script src="js/main.js"></script>
+
+    <!-- Statistics JS -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="~/js/statistics.js"></script>
 </body>
 </html>
