@@ -137,11 +137,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\timetablejs.css" />
     <Content Include="css\toastr.min.css" />
     <Content Include="images\purple.jpg" />
     <Content Include="js\editform.js" />
     <Content Include="js\ProgrammerDefined.js" />
     <Content Include="js\statistics.js" />
+    <Content Include="js\timetable.min.js" />
     <Content Include="js\toastr.min.js" />
     <Content Include="packages.config" />
     <Content Include="ApplicationInsights.config">
