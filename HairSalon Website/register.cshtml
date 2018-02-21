@@ -22,7 +22,7 @@
             {
                 user = DatabaseControl.LogIn(Request.Form["email"], Request.Form["confirmpassword"]);
 
-                if (user.UserID != 0)
+                if (user.UserID != "0")
                 {
                     Session["HairSalonUser"] = user;
                     Response.Redirect("~/customerhome.cshtml");

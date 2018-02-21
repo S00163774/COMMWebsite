@@ -6,7 +6,7 @@
 
     if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
     {
-        //Response.Redirect("~/login.cshtml");
+        Response.Redirect("~/login.cshtml");
     }
 
     List<ProductOrderCount> products = DatabaseControl.ProductOrderCount();

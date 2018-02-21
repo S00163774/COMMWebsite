@@ -9,34 +9,49 @@ using Twilio.Types;
 
 namespace HairSalon_Website
 {
-    public class ProductCategory
-    {
-        public string ProductCategoryID { get; set; }
-        public string ProductCategoryName { get; set; }
-    }
-
     public class Product
     {
         public int ProductID { get; set; }
         public string ProductName { get; set; }
-        public string ProductDesc { get; set; }
         public double ProductPrice { get; set; }
         public int ProductStock { get; set; }
         public string ProductURL { get; set; }
-        public int ProductCategoryID { get; set; }
-
     }
 
     public class User
     {
-        public int UserID { get; set; }
+        public string UserID { get; set; }
         public string UserFirstName { get; set; }
         public string UserSurname { get; set; }
         public string UserMobileNumber { get; set; }
         public string UserEmail { get; set; }
         public string UserPassword { get; set; }
         public string UserType { get; set; }
-        public string UserURL { get; set; }
+    }
+
+    public class TimetableDetails
+    {
+        public string Stylist { get; set; }
+        public string User { get; set; }
+        public string Treatment { get; set; }
+
+        public int BeginSlot { get; set; }
+        public int EndSlot { get; set; }
+
+        public int Day { get; set; }
+        public int Month { get; set; }
+        public int Year { get; set; }
+
+        public int Hour { get; set; }
+        public int Minutes { get; set; }
+
+        public int EndHour { get; set; }
+        public int EndMinutes { get; set; }
+
+        public override string ToString()
+        {
+            return this.Stylist + "," + this.User + " - " + this.Treatment + "," + this.Day.ToString() + "," + this.Month.ToString() + "," + this.Year.ToString() + "," + this.Hour.ToString() + "," + this.Minutes.ToString() + "," + this.EndHour.ToString() + "," + this.EndMinutes.ToString();
+        }
     }
 
     public class Checkout
