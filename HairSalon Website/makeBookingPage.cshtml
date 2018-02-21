@@ -1,6 +1,6 @@
 ﻿@using HairSalon_Website;
 @{
-    List<Category> categories = DatabaseControl.GetCategories();
+    List<ProductCategory> categories = DatabaseControl.ReturnCategories();
 
     string _id;
 
@@ -8,6 +8,7 @@
     {
         _id = Session["UserID"].ToString();
     }
+
 }
 
 <!DOCTYPE html>
@@ -254,17 +255,17 @@
                 </div>
             </div>
             <div class="row row-bottom-padded-sm">
-                @foreach (Category category in categories)
+                @foreach (ProductCategory category in categories)
                 {
                     <div class="col-md-4 col-sm-6 col-xxs-12">
                         <div class="fh5co-project-item">
                             <img src="images/work_1.jpg" alt="Image" class="img-responsive">
                             <div class="fh5co-text">
-                                <h2>@category.Name</h2>
+                                <h2>@category.ProductCategoryName</h2>
                             </div>
                             <div class="form-group text-center">
-                                <button class="btn btn-primary btn-sm" name="addToBasket" type="submit" onclick="BookAppointment('@category.Name')">Make Booking</button>
-                            </div>@**@
+                                <button class="btn btn-primary btn-sm" name="addToBasket" type="submit" onclick="">Make Booking</button>
+                            </div>
                         </div>
                     </div>
                 }
@@ -344,7 +345,7 @@
     <script src="js/jquery.stellar.min.js"></script>
     <!-- Counter -->
     <script src="js/jquery.countTo.js"></script>
-    <!-- booking necessary javascript code-->
+    <!-- shop necessary javascript code-->
     <script src="js/programmerDefined.js"></script>
     <!-- Magnific Popup -->
     <script src="js/jquery.magnific-popup.min.js"></script>
@@ -371,14 +372,6 @@
                 $('#colour-variations').toggleClass('sleep');
             });
         });
-
-        function BookAppointment(clicked_Name) {
-            var CategoryName = clicked_Name;
-
-            sessionStorage.setItem('categoryName', JSON.stringify(CategoryName));
-
-            window.location.href = "booking.cshtml";
-        }
     </script>
     <!-- End demo purposes only -->
     <!-- Main JS (Do not remove) -->
@@ -386,3 +379,4 @@
 
 </body>
 </html>
+

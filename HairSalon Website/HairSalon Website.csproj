@@ -169,8 +169,6 @@
     <Content Include="makeBookingPage.cshtml" />
     <Content Include="managestylists.cshtml" />
     <Content Include="statistics.cshtml" />
-    <Content Include="booking.cshtml" />
-    <Content Include="editBooking.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

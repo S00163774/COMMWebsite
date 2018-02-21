@@ -170,6 +170,10 @@ function PriceGetter() {
     sessionStorage.setItem("price", JSON.stringify(price));
 }
 
+//function GetTotalPrice() {
+//    $(".btn btn-success.btn-block")
+//}
+
 function CheckoutPage() { // Sends to the checkout page
     PriceGetter();
 
@@ -240,33 +244,4 @@ function ShowDetails() {
     var postcd = details.postCode.toUpperCase();
 
     $('#shippingAddress').after('<div><strong>' + details.Name + '</strong></div> <div><strong>' + details.Address1 + '</strong></div> <div><strong>' + details.Address2 + '</strong></div> <div><strong>Sligo</strong></div> <div><strong>' + postcd + '</strong></div> <div>Ireland</div>');
-}
-
-function BookAppointment(clicked_Name, e) {
-    var CategoryName = clicked_Name;
-
-    sessionStorage.setItem('categoryName', JSON.stringify(CategoryName));
-
-    window.location.href = "booking.cshtml";
-}
-
-function GetTime(clicked_id) {
-    var timeSlot = document.getElementById(clicked_id).value;
-    $('#time').val(timeSlot);
-}
-
-function ClearTime() {
-    $('#time').val("");
-}
-
-function GetCategory() {
-    var category = sessionStorage.getItem("categoryName").toString();
-
-    $('div h3').append('<p>' + category + '</p>');
-}
-
-function DisplayEditBooking(clicked_id, id) {
-    var timeSlot = document.getElementById(clicked_id).value;
-    $('#datepicker').val(timeSlot);
-    $('#bookingId').val(id);
 }
