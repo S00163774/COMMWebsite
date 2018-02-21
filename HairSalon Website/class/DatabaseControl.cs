@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Data.SqlClient;
 using System.Data;
-using System.Net.Mail;
-using Twilio;
-using Twilio.Rest.Api.V2010.Account;
-using Twilio.Types;
 
 namespace HairSalon_Website
 {
     public class DatabaseControl
     {
-        static string DBConnection = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
         const string DatabaseConnection = "Server=tcp:boothserver.database.windows.net,1433;" +
         "Initial Catalog=boothtest;Persist Security Info=False;" +
-        "User ID=S00163774;Password=BOOTHserver%163774;" +
+        "User ID=S00163774;Password=BOOTHserver%;" +
         "MultipleActiveResultSets=False;Encrypt=True;" +
         "TrustServerCertificate=False;Connection Timeout=30;";
 
@@ -26,7 +19,7 @@ namespace HairSalon_Website
         {
             List<ProductCategory> ProductCategories = new List<ProductCategory>();
 
-            using (SqlConnection boothtest = new SqlConnection(DBConnection))
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
             {
                 using (SqlCommand CategoriesCMD = new SqlCommand("ReturnCategories", boothtest))
                 {
@@ -42,25 +35,26 @@ namespace HairSalon_Website
                     {
                         ProductCategory productCategory = new ProductCategory();
 
-                        productCategory.ProductCategoryID = myReader["ID"].ToString();
-                        productCategory.ProductCategoryName = myReader["CategoryName"].ToString();
+                        productCategory.ProductCategoryID = int.Parse(myReader["ProductCategoryID"].ToString());
+                        productCategory.ProductCategoryName = myReader["ProductCategoryName"].ToString();
 
                         ProductCategories.Add(productCategory);
                     }
 
-                    myReader.Close();
-                    boothtest.Close();
+                    myReader.Close(); // Close Command
 
-                    return ProductCategories;
+                    boothtest.Close(); // Close Database Connection
                 }
             }
+
+            return ProductCategories;
         }
 
         static public List<Product> ReturnProducts()
         {
             List<Product> products = new List<Product>();
 
-            using (SqlConnection boothtest = new SqlConnection(DBConnection))
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
             {
                 using (SqlCommand ProductsCMD = new SqlCommand("ReturnProducts", boothtest))
                 {
@@ -87,12 +81,13 @@ namespace HairSalon_Website
                         products.Add(product);
                     }
 
-                    myReader.Close();
-                    boothtest.Close();
+                    myReader.Close(); // Close Command
 
-                    return products;
+                    boothtest.Close(); // Close Database Connection
                 }
             }
+
+            return products;
         }
 
         static public int InsertProduct(string name, string desc, double price, int stock, string url, int categoryid)
@@ -138,10 +133,13 @@ namespace HairSalon_Website
 
                     result = Convert.ToInt32(Result.Value);
 
-                    return result;
-                }
+                    myReader.Close(); // Close Command
 
+                    boothtest.Close(); // Close Database Connection
+                }
             }
+
+            return result;
         }
 
         static public int InsertCategory(string name)
@@ -167,17 +165,21 @@ namespace HairSalon_Website
 
                     result = Convert.ToInt32(Result.Value);
 
-                    return result;
-                }
+                    myReader.Close(); // Close Command
 
+                    boothtest.Close(); // Close Database Connection
+
+                }
             }
+
+            return result;
         }
 
         static public User LogIn(string email, string password)
         {
             User user = new User();
 
-            using (SqlConnection boothtest = new SqlConnection(DBConnection))
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
             {
                 using (SqlCommand LogInCMD = new SqlCommand("LogIn", boothtest)) // Create New Command calling 'LogIn' stored procedure in boothtest database
                 {
@@ -205,6 +207,7 @@ namespace HairSalon_Website
                         user.UserMobileNumber = myReader["UserMobileNumber"].ToString();
                         user.UserEmail = myReader["UserEmail"].ToString();
                         user.UserType = myReader["UserType"].ToString();
+                        user.UserURL = myReader["UserURL"].ToString();
                     }
 
                     myReader.Close(); // Close Command
@@ -261,81 +264,141 @@ namespace HairSalon_Website
 
                     boothtest.Close(); // Close Database Connection
                 }
-
-                return emailExists;
             }
+
+            return emailExists;
         }
 
-        static public List<int> DateTimesAvailable()
+        static public List<User> ReturnStylists()
         {
-            using (SqlConnection db = new SqlConnection(DBConnection))
+            List<User> stylists = new List<User>();
+
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
             {
-                List<int> slotsTaken = new List<int>();
-
-                using (SqlCommand DatesCMD = new SqlCommand("GetDates", db))
+                using (SqlCommand StylistsCMD = new SqlCommand("ReturnStylists", boothtest))
                 {
-                    DatesCMD.CommandType = CommandType.StoredProcedure;
+                    StylistsCMD.CommandType = CommandType.StoredProcedure;
 
-                    db.Open();
+                    boothtest.Open();
 
-                    SqlDataReader myReader = DatesCMD.ExecuteReader();
+                    SqlDataReader myReader = StylistsCMD.ExecuteReader();
+
+                    stylists = new List<User>();
 
                     while (myReader.Read())
                     {
-                        int slot = int.Parse(myReader["Slot"].ToString());
+                        User stylist = new User();
 
-                        slotsTaken.Add(slot);
+                        stylist.UserID = int.Parse(myReader["UserID"].ToString());
+                        stylist.UserFirstName = myReader["UserFirstName"].ToString();
+                        stylist.UserSurname = myReader["UserSurname"].ToString();
+                        stylist.UserMobileNumber = myReader["UserMobileNumber"].ToString();
+                        stylist.UserEmail = myReader["UserEmail"].ToString();
+                        stylist.UserType = myReader["UserType"].ToString();
+                        stylist.UserURL = myReader["UserURL"].ToString();
+
+                        stylists.Add(stylist);
                     }
 
-                    myReader.Close();
-                    db.Close();
+                    myReader.Close(); // Close Command
 
-                    return slotsTaken;
+                    boothtest.Close(); // Close Database Connection
                 }
             }
-        }
-    }
 
-    public class Checkout
-    {
-        public static void SendEmail(string emailUser)
-        {
-            MailMessage Msg = new MailMessage();
-            Msg.From = new MailAddress("owenexampletest@gmail.com");
-            Msg.To.Add(emailUser);
-            Msg.Subject = "This is the Test Subject";
-            Msg.Body = "This is the Test Body for the Project 300 email confirmation.";
-            SmtpClient smtp = new SmtpClient();
-            smtp.Host = "smtp.gmail.com";
-            smtp.Port = 587;
-            smtp.Credentials = new System.Net.NetworkCredential("project300email@gmail.com", "Project300");
-            smtp.EnableSsl = true;
-            smtp.Send(Msg);
-            //Console.WriteLine("Email Sent!");
+            return stylists;
         }
 
-        public static void SendTextMessage(string number)
+        static public string InsertStylist(string firstname, string surname, string mobilenumber, string email, string password, string url)
         {
-            if (number.Length == 10)
+            string emailExists = null;
+
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
             {
-                number = number.Remove(0, 1);
+                using (SqlCommand StylistCMD = new SqlCommand("InsertStylist", boothtest))
+                {
+                    StylistCMD.CommandType = CommandType.StoredProcedure;
+
+                    // Input Variables
+                    SqlParameter inputFirstName = StylistCMD.Parameters.Add("@UserFirstName", SqlDbType.NVarChar, 20);
+                    inputFirstName.Direction = ParameterDirection.Input;
+
+                    SqlParameter inputSurname = StylistCMD.Parameters.Add("@UserSurname", SqlDbType.NVarChar, 30);
+                    inputSurname.Direction = ParameterDirection.Input;
+
+                    SqlParameter inputMobileNumber = StylistCMD.Parameters.Add("@UserMobileNumber", SqlDbType.NVarChar, 10);
+                    inputMobileNumber.Direction = ParameterDirection.Input;
+
+                    SqlParameter inputEmail = StylistCMD.Parameters.Add("@UserEmail", SqlDbType.NVarChar, 50);
+                    inputEmail.Direction = ParameterDirection.Input;
+
+                    SqlParameter inputPassword = StylistCMD.Parameters.Add("@UserPassword", SqlDbType.VarChar, 50);
+                    inputPassword.Direction = ParameterDirection.Input;
+
+                    SqlParameter inputURL = StylistCMD.Parameters.Add("@UserURL", SqlDbType.VarChar, 400);
+                    inputURL.Direction = ParameterDirection.Input;
+
+                    SqlParameter returnEmailExists = StylistCMD.Parameters.Add("Result", SqlDbType.Int);
+                    returnEmailExists.Direction = ParameterDirection.ReturnValue;
+
+                    inputFirstName.Value = firstname;
+                    inputSurname.Value = surname;
+                    inputMobileNumber.Value = mobilenumber;
+                    inputEmail.Value = email;
+                    inputPassword.Value = password;
+                    inputURL.Value = url;
+
+                    boothtest.Open(); // Open Database Connection
+
+                    SqlDataReader myReader = StylistCMD.ExecuteReader(); // Execute Command
+
+                    emailExists = Convert.ToString(returnEmailExists.Value);
+
+                    myReader.Close(); // Close Command
+
+                    boothtest.Close(); // Close Database Connection
+                }
             }
 
-            // Your Account SID from twilio.com/console
-            var accountSid = "AC0870a5e30dece345258735402d9f8e33";
-            // Your Auth Token from twilio.com/console
-            var authToken = "3a211e065304d39b9d5f699449fe7bcd";
+            return emailExists;
+        }
 
-            TwilioClient.Init(accountSid, authToken);
+        // Statistic Control Methods
 
-            var message = MessageResource.Create(
-                to: new PhoneNumber("+353" + number),
-                from: new PhoneNumber("+353861802018"),
-                body: "Mo n fi message se testing fun project 300 mi. L'agbara Olorun o ma sise.");
+        static public List<ProductOrderCount> ProductOrderCount()
+        {
+            List<ProductOrderCount> products = new List<ProductOrderCount>();
 
-            Console.WriteLine(message.Sid);
-            Console.Write("Press any key to continue.");
-            Console.ReadKey();
+            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            {
+                using (SqlCommand ProductsCMD = new SqlCommand("DataProductCountOrders", boothtest))
+                {
+                    ProductsCMD.CommandType = CommandType.StoredProcedure;
+
+                    boothtest.Open();
+
+                    SqlDataReader myReader = ProductsCMD.ExecuteReader();
+
+                    products = new List<ProductOrderCount>();
+
+                    while (myReader.Read())
+                    {
+                        ProductOrderCount product = new ProductOrderCount();
+
+                        product.ProductID = int.Parse(myReader["ID"].ToString());
+                        product.ProductName = myReader["Name"].ToString();
+                        product.NoOfOrders = int.Parse(myReader["NoOfOrders"].ToString());
+
+                        products.Add(product);
+                    }
+
+                    myReader.Close(); // Close Command
+
+                    boothtest.Close(); // Close Database Connection
+                }
+            }
+
+            return products;
         }
     }
 }

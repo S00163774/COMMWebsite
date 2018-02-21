@@ -17,7 +17,7 @@
             {
                 Session["HairSalonUser"] = user;
 
-                if (user.UserType == "Staff")
+                if (user.UserType == "Staff" || user.UserType == "Admin")
                 {
                     Response.Redirect("~/adminhome.cshtml");
                 }

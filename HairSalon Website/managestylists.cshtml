@@ -1,14 +1,42 @@
 ﻿@using System.Data.SqlClient;
-@using System.Data
+@using System.Data;
 @using HairSalon_Website;
 @{
+    // Log In Checker ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     User userLoggedIn = (User)Session["HairSalonUser"];
 
     if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
     {
         Response.Redirect("~/login.cshtml");
     }
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+    List<User> stylists = DatabaseControl.ReturnStylists();
+
+    string stylistAdded = null;
+
+    if (IsPost)
+    {
+        Validation.Add("firstname", Validator.Required("Please Enter Stylist First Name"));
+        Validation.Add("surname", Validator.Required("Please Enter Stylist Surname"));
+        Validation.Add("mobilenumber", Validator.Required("Please Enter Stylist Mobile Number"));
+        Validation.Add("email", Validator.Required("Please Enter Stylist Email"));
+        Validation.Add("password", Validator.Required("Please Enter Stylist Password"));
+        Validation.Add("confirmpassword", Validator.Required("Please Confirm Stylist Password"), Validator.EqualsTo("password", "Password must match previous"));
+        Validation.Add("url", Validator.Required("Please Enter a Profile Image URL"));
+
+        if (Validation.IsValid())
+        {
+            stylistAdded = DatabaseControl.InsertStylist(Request.Form["firstname"], Request.Form["surname"], Request.Form["mobilenumber"], Request.Form["email"], Request.Form["password"], Request.Form["url"]);
+            stylists = DatabaseControl.ReturnStylists();
+        }
+
+        if (stylistAdded == "0")
+        {
+
+        }
+
+    }
 }
 
 <!DOCTYPE html>
@@ -63,6 +91,8 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <!-- Bootstrap  -->
     <link rel="stylesheet" href="css/bootstrap.css">
+    <!-- Toastr Style Sheet -->
+    <link rel="stylesheet" href="css/toastr.min.css">
     <!--
     Default Theme Style
     You can change the style.css (default color purple) to one of these styles
@@ -77,7 +107,7 @@
 
     -->
     <link rel="stylesheet" href="css/style.css">
-
+    <!-- End demo purposes only -->
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
@@ -95,7 +125,7 @@
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
                     <a class="navbar-brand" href="index.html">Hair Salon</a>
                 </div>
-                @*<div id="navbar" class="navbar-collapse collapse">
+                <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
                         <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
@@ -104,95 +134,82 @@
                         <li><a href="#" data-nav-section="about"><span>About</span></a></li>
                         <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
                     </ul>
-                </div>*@
+                </div>
             </nav>
             <!-- </div> -->
         </div>
     </header>
-
-    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
+    <section id="fh5co-work" data-section="work" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
         <div class="gradient"></div>
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Welcome, @userLoggedIn.UserFirstName!</h2>
+                    <h2 class="to-animate">Manage Stylists</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>From this Admin Hub you can manage all aspects of the system</h3>
+                            <h3>Add or Remove Stylists</h3>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="row row-bottom-padded-md">
+                <div class="col-md-6 to-animate">
+                    <h3>Stylists</h3>
+                    @foreach (User stylist in stylists)
+                    {
+                        <div class="col-md-4 col-sm-6 col-xxs-12">
+                            <div class="fh5co-project-item">
+                                <img src="images/work_1.jpg" alt="Image" class="img-responsive">
+                                <div class="fh5co-text">
+                                    <h2>@stylist.UserFirstName @stylist.UserSurname</h2>
+                                </div>
+                                <div class="form-group text-center">
+                                    <input id="@stylist.UserID" class="btn btn-primary btn-sm open-edit-form" name="EditStylist" value="Edit" type="submit" onclick="" data-mfp-src="#edit-form">
+                                    <button class="btn btn-primary btn-sm" name="DeleteStylist" value="" type="submit"><i class="fh5co-intro-icon icon-close"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <form method="post">
+                    <div class="col-md-6 to-animate">
+                        <h3>Sign Up</h3>
+                        <div class="form-group ">
+                            <label for="firstname" class="sr-only">First Name</label>
+                            <input id="firstname" class="form-control" placeholder="First Name" type="text" name="firstname">@Html.ValidationMessage("firstname")
+                        </div>
+                        <div class="form-group ">
+                            <label for="surname" class="sr-only">Surname</label>
+                            <input id="surname" class="form-control" placeholder="Surname" type="text" name="surname">@Html.ValidationMessage("surname")
+                        </div>
+                        <div class="form-group ">
+                            <label for="mobilenumber" class="sr-only">Mobile Number</label>
+                            <input id="mobilenumber" class="form-control" placeholder="Mobile Number" type="text" name="mobilenumber">@Html.ValidationMessage("mobilenumber")
+                        </div>
+                        <div class="form-group ">
+                            <label for="email" class="sr-only">Email</label>
+                            <input id="email" class="form-control" placeholder="Email" type="email" name="email">@Html.ValidationMessage("email")
+                        </div>
+                        <div class="form-group ">
+                            <label for="password" class="sr-only">Password</label>
+                            <input id="password" class="form-control" placeholder="Password" type="password" name="password">@Html.ValidationMessage("password")
+                        </div>
+                        <div class="form-group ">
+                            <label for="confirmpassword" class="sr-only">Confirm Password</label>
+                            <input id="confirmpassword" class="form-control" placeholder="Confirm Password" type="password" name="confirmpassword">@Html.ValidationMessage("confirmpassword")
+                        </div>
+                        <div class="form-group ">
+                            <label for="url" class="sr-only">Profile Image URL</label>
+                            <input id="url" class="form-control" placeholder="URL//" type="text" name="url">@Html.ValidationMessage("url")
+                        </div>
+                        <div class="form-group ">
+                            <input class="btn btn-primary btn-lg" value="Add Stylist" type="submit">
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
         <div class="slant"></div>
-    </section>
-    <section id="fh5co-intro">
-        <div class="container">
-            <div class="row row-bottom-padded-lg">
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_7.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-bulb"></i>
-                        <h2>Manage Store Products</h2>
-                        <p>Add, Remove or Edit Products for the Online Store</p>
-                        <p><a href="~/manageproduct.cshtml" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>Manage Store Orders</h2>
-                        <p>View all Orders made by customers in the Online Store, view products ordered and delivery details, prepare the package and confirm the order for delivery</p>
-                        <p><a href="#" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>Statistics</h2>
-                        <p>View Statistics on Product Sales, Popular Bookings and General Customers Details</p>
-                        <p><a href="~/statistics.cshtml" class="btn btn-primary">Statistics</a></p>
-                    </div>
-                </div>
-            </div>
-            <div class="row row-bottom-padded-lg">
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_7.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-bulb"></i>
-                        <h2>Manage Stylists</h2>
-                        <p>Add or Remove Stylists on the system</p>
-                        <p><a href="~/managestylists.cshtml" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>Manage Styles</h2>
-                        <p>Add or Remove Styles/Services from the system, along with Style Categories</p>
-                        <p><a href="#" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_10.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-rocket"></i>
-                        <h2>View Timetable</h2>
-                        <p>View the Timetable for the upcoming days of work, what time each stylist is working and what service they are providing</p>
-                        <p><a href="#" class="btn btn-primary">View</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 
     <footer id="footer" role="contentinfo">
@@ -234,6 +251,11 @@
     <!-- Google Map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
     <script src="js/google_map.js"></script>
+    <!-- Toastr Notifications -->
+    <script src="js/toastr.min.js"></script>
+
+    <!--My JS Code-->
+    <script src="~/js/editform.js"></script>
 
     <!-- Main JS (Do not remove) -->
     <script src="js/main.js"></script>
