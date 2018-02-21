@@ -348,7 +348,6 @@ C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.Razor.xml
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.xml
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Deployment.xml
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Razor.xml
-C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.csprojResolveAssemblyReference.cache
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.dll
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.pdb
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Microsoft.IdentityModel.Logging.dll
@@ -414,3 +413,4 @@ C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\System.Web.Web
 C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Deployment.xml
 C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\System.Web.WebPages.Razor.xml
 C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\Twilio.xml
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.csprojResolveAssemblyReference.cache

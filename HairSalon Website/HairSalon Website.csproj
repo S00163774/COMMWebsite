@@ -143,6 +143,7 @@
     <Content Include="js\editform.js" />
     <Content Include="js\ProgrammerDefined.js" />
     <Content Include="js\statistics.js" />
+    <Content Include="js\timetable.js" />
     <Content Include="js\timetable.min.js" />
     <Content Include="js\toastr.min.js" />
     <Content Include="packages.config" />
@@ -168,6 +169,7 @@
     <Content Include="statistics.cshtml" />
     <Content Include="booking.cshtml" />
     <Content Include="editBooking.cshtml" />
+    <Content Include="timetable.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

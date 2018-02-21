@@ -16,54 +16,25 @@ namespace HairSalon_Website
         "MultipleActiveResultSets=False;Encrypt=True;" +
         "TrustServerCertificate=False;Connection Timeout=30;";
 
+        const string CommDatabaseConnection = "Server=tcp:commtest1996.database.windows.net,1433;" +
+        "Initial Catalog=commtest1996;Persist Security Info=False;" +
+        "User ID=S00151977;Password=Sligoit17;" +
+        "MultipleActiveResultSets=False;Encrypt=True;" +
+        "TrustServerCertificate=False;Connection Timeout=30;";
+
         static string Db = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
-
-        static public List<ProductCategory> ReturnCategories()
-        {
-            List<ProductCategory> ProductCategories = new List<ProductCategory>();
-
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
-            {
-                using (SqlCommand CategoriesCMD = new SqlCommand("ReturnCategories", boothtest))
-                {
-                    CategoriesCMD.CommandType = CommandType.StoredProcedure;
-
-                    boothtest.Open();
-
-                    SqlDataReader myReader = CategoriesCMD.ExecuteReader();
-
-                    ProductCategories = new List<ProductCategory>();
-
-                    while (myReader.Read())
-                    {
-                        ProductCategory productCategory = new ProductCategory();
-
-                        productCategory.ProductCategoryID = myReader["ProductCategoryID"].ToString();
-                        productCategory.ProductCategoryName = myReader["ProductCategoryName"].ToString();
-
-                        ProductCategories.Add(productCategory);
-                    }
-
-                    myReader.Close(); // Close Command
-
-                    boothtest.Close(); // Close Database Connection
-                }
-            }
-
-            return ProductCategories;
-        }
 
         static public List<Product> ReturnProducts()
         {
             List<Product> products = new List<Product>();
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand ProductsCMD = new SqlCommand("ReturnProducts", boothtest))
+                using (SqlCommand ProductsCMD = new SqlCommand("ReturnProducts", commtest1996))
                 {
                     ProductsCMD.CommandType = CommandType.StoredProcedure;
 
-                    boothtest.Open();
+                    commtest1996.Open();
 
                     SqlDataReader myReader = ProductsCMD.ExecuteReader();
 
@@ -73,33 +44,31 @@ namespace HairSalon_Website
                     {
                         Product product = new Product();
 
-                        product.ProductID = int.Parse(myReader["ProductID"].ToString());
+                        product.ProductID = int.Parse(myReader["ID"].ToString());
                         product.ProductName = myReader["ProductName"].ToString();
-                        product.ProductDesc = myReader["ProductDesc"].ToString();
-                        product.ProductPrice = double.Parse(myReader["ProductPrice"].ToString());
-                        product.ProductStock = int.Parse(myReader["ProductStock"].ToString());
-                        product.ProductURL = myReader["ProductURL"].ToString();
-                        product.ProductCategoryID = int.Parse(myReader["ProductCategoryID"].ToString());
+                        product.ProductPrice = double.Parse(myReader["Price"].ToString());
+                        product.ProductStock = int.Parse(myReader["Quantity"].ToString());
+                        product.ProductURL = myReader["imageURL"].ToString();
 
                         products.Add(product);
                     }
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return products;
-        }
+        } //COMM Ready
 
-        static public int InsertProduct(string name, string desc, double price, int stock, string url, int categoryid)
+        static public int InsertProduct(string name, double price, int stock, string url)
         {
             int result = 0;
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand ProductCMD = new SqlCommand("InsertProduct", boothtest))
+                using (SqlCommand ProductCMD = new SqlCommand("InsertProduct", commtest1996))
                 {
                     ProductCMD.CommandType = CommandType.StoredProcedure;
 
@@ -107,15 +76,11 @@ namespace HairSalon_Website
                     ProductName.Direction = ParameterDirection.Input;
                     ProductName.Value = name;
 
-                    SqlParameter ProductDesc = ProductCMD.Parameters.Add("@ProductDesc", SqlDbType.NVarChar, 100);
-                    ProductDesc.Direction = ParameterDirection.Input;
-                    ProductDesc.Value = desc;
-
-                    SqlParameter ProductPrice = ProductCMD.Parameters.Add("@ProductPrice", SqlDbType.SmallMoney);
+                    SqlParameter ProductPrice = ProductCMD.Parameters.Add("@ProductPrice", SqlDbType.Float);
                     ProductPrice.Direction = ParameterDirection.Input;
                     ProductPrice.Value = price;
 
-                    SqlParameter ProductStock = ProductCMD.Parameters.Add("@ProductStock", SqlDbType.SmallInt);
+                    SqlParameter ProductStock = ProductCMD.Parameters.Add("@ProductStock", SqlDbType.Float);
                     ProductStock.Direction = ParameterDirection.Input;
                     ProductStock.Value = stock;
 
@@ -123,14 +88,10 @@ namespace HairSalon_Website
                     ProductURL.Direction = ParameterDirection.Input;
                     ProductURL.Value = url;
 
-                    SqlParameter ProductCategoryID = ProductCMD.Parameters.Add("@ProductCategoryID", SqlDbType.Int);
-                    ProductCategoryID.Direction = ParameterDirection.Input;
-                    ProductCategoryID.Value = categoryid;
-
                     SqlParameter Result = ProductCMD.Parameters.Add("Result", SqlDbType.Bit);
                     Result.Direction = ParameterDirection.ReturnValue;
 
-                    boothtest.Open();
+                    commtest1996.Open();
 
                     SqlDataReader myReader = ProductCMD.ExecuteReader();
 
@@ -138,53 +99,20 @@ namespace HairSalon_Website
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return result;
-        }
-
-        static public int InsertCategory(string name)
-        {
-            int result = 0;
-
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
-            {
-                using (SqlCommand CategoryCMD = new SqlCommand("InsertProductCategory", boothtest))
-                {
-                    CategoryCMD.CommandType = CommandType.StoredProcedure;
-
-                    SqlParameter CategoryName = CategoryCMD.Parameters.Add("@ProductCategoryName", SqlDbType.NVarChar, 20);
-                    CategoryName.Direction = ParameterDirection.Input;
-                    CategoryName.Value = name;
-
-                    SqlParameter Result = CategoryCMD.Parameters.Add("Result", SqlDbType.Bit);
-                    Result.Direction = ParameterDirection.ReturnValue;
-
-                    boothtest.Open();
-
-                    SqlDataReader myReader = CategoryCMD.ExecuteReader();
-
-                    result = Convert.ToInt32(Result.Value);
-
-                    myReader.Close(); // Close Command
-
-                    boothtest.Close(); // Close Database Connection
-
-                }
-            }
-
-            return result;
-        }
+        } //COMM Ready
 
         static public User LogIn(string email, string password)
         {
             User user = new User();
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand LogInCMD = new SqlCommand("LogIn", boothtest)) // Create New Command calling 'LogIn' stored procedure in boothtest database
+                using (SqlCommand LogInCMD = new SqlCommand("LogIn", commtest1996)) // Create New Command calling 'LogIn' stored procedure in boothtest database
                 {
                     LogInCMD.CommandType = CommandType.StoredProcedure;
 
@@ -198,37 +126,36 @@ namespace HairSalon_Website
                     inputEmail.Value = email;
                     inputPassword.Value = password;
 
-                    boothtest.Open(); // Open Database Connection
+                    commtest1996.Open(); // Open Database Connection
 
                     SqlDataReader myReader = LogInCMD.ExecuteReader(); // Execute Command
 
                     while (myReader.Read())
                     {
-                        user.UserID = int.Parse(myReader["UserID"].ToString());
-                        user.UserFirstName = myReader["UserFirstName"].ToString();
-                        user.UserSurname = myReader["UserSurname"].ToString();
-                        user.UserMobileNumber = myReader["UserMobileNumber"].ToString();
-                        user.UserEmail = myReader["UserEmail"].ToString();
+                        user.UserID = myReader["ID"].ToString();
+                        user.UserFirstName = myReader["FirstName"].ToString();
+                        user.UserSurname = myReader["Surname"].ToString();
+                        user.UserMobileNumber = myReader["Phone"].ToString();
+                        user.UserEmail = myReader["Email"].ToString();
                         user.UserType = myReader["UserType"].ToString();
-                        user.UserURL = myReader["UserURL"].ToString();
                     }
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return user;
-        }
+        } //COMM Ready
 
         static public string Register(string firstname, string surname, string mobilenumber, string email, string password)
         {
             string emailExists = null;
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand RegisterCMD = new SqlCommand("Register", boothtest))
+                using (SqlCommand RegisterCMD = new SqlCommand("Register", commtest1996))
                 {
                     RegisterCMD.CommandType = CommandType.StoredProcedure;
 
@@ -257,7 +184,7 @@ namespace HairSalon_Website
                     inputEmail.Value = email;
                     inputPassword.Value = password;
 
-                    boothtest.Open(); // Open Database Connection
+                    commtest1996.Open(); // Open Database Connection
 
                     SqlDataReader myReader = RegisterCMD.ExecuteReader(); // Execute Command
 
@@ -265,24 +192,24 @@ namespace HairSalon_Website
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return emailExists;
-        }
+        } //COMM Ready
 
         static public List<User> ReturnStylists()
         {
             List<User> stylists = new List<User>();
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand StylistsCMD = new SqlCommand("ReturnStylists", boothtest))
+                using (SqlCommand StylistsCMD = new SqlCommand("ReturnStylists", commtest1996))
                 {
                     StylistsCMD.CommandType = CommandType.StoredProcedure;
 
-                    boothtest.Open();
+                    commtest1996.Open();
 
                     SqlDataReader myReader = StylistsCMD.ExecuteReader();
 
@@ -292,33 +219,32 @@ namespace HairSalon_Website
                     {
                         User stylist = new User();
 
-                        stylist.UserID = int.Parse(myReader["UserID"].ToString());
-                        stylist.UserFirstName = myReader["UserFirstName"].ToString();
-                        stylist.UserSurname = myReader["UserSurname"].ToString();
-                        stylist.UserMobileNumber = myReader["UserMobileNumber"].ToString();
-                        stylist.UserEmail = myReader["UserEmail"].ToString();
+                        stylist.UserID = myReader["ID"].ToString();
+                        stylist.UserFirstName = myReader["FirstName"].ToString();
+                        stylist.UserSurname = myReader["Surname"].ToString();
+                        stylist.UserMobileNumber = myReader["Phone"].ToString();
+                        stylist.UserEmail = myReader["Email"].ToString();
                         stylist.UserType = myReader["UserType"].ToString();
-                        stylist.UserURL = myReader["UserURL"].ToString();
 
                         stylists.Add(stylist);
                     }
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return stylists;
-        }
+        } //COMM Ready
 
         static public string InsertStylist(string firstname, string surname, string mobilenumber, string email, string password, string url)
         {
             string emailExists = null;
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand StylistCMD = new SqlCommand("InsertStylist", boothtest))
+                using (SqlCommand StylistCMD = new SqlCommand("InsertStylist", commtest1996))
                 {
                     StylistCMD.CommandType = CommandType.StoredProcedure;
 
@@ -338,9 +264,6 @@ namespace HairSalon_Website
                     SqlParameter inputPassword = StylistCMD.Parameters.Add("@UserPassword", SqlDbType.VarChar, 50);
                     inputPassword.Direction = ParameterDirection.Input;
 
-                    SqlParameter inputURL = StylistCMD.Parameters.Add("@UserURL", SqlDbType.VarChar, 400);
-                    inputURL.Direction = ParameterDirection.Input;
-
                     SqlParameter returnEmailExists = StylistCMD.Parameters.Add("Result", SqlDbType.Int);
                     returnEmailExists.Direction = ParameterDirection.ReturnValue;
 
@@ -349,9 +272,8 @@ namespace HairSalon_Website
                     inputMobileNumber.Value = mobilenumber;
                     inputEmail.Value = email;
                     inputPassword.Value = password;
-                    inputURL.Value = url;
 
-                    boothtest.Open(); // Open Database Connection
+                    commtest1996.Open(); // Open Database Connection
 
                     SqlDataReader myReader = StylistCMD.ExecuteReader(); // Execute Command
 
@@ -359,12 +281,53 @@ namespace HairSalon_Website
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return emailExists;
-        }
+        } //COMM Ready
+
+        static public List<TimetableDetails> TimetableDetails()
+        {
+            List<TimetableDetails> details = new List<TimetableDetails>();
+
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
+            {
+                using (SqlCommand DetailsCMD = new SqlCommand("TimetableDetails", commtest1996))
+                {
+                    DetailsCMD.CommandType = CommandType.StoredProcedure;
+
+                    commtest1996.Open();
+
+                    SqlDataReader myReader = DetailsCMD.ExecuteReader();
+
+                    details = new List<TimetableDetails>();
+
+                    while (myReader.Read())
+                    {
+                        TimetableDetails detail = new TimetableDetails();
+
+                        detail.Stylist = myReader["Stylist"].ToString();
+                        detail.User = myReader["User"].ToString();
+                        detail.Treatment = myReader["Treatment"].ToString();
+                        detail.BeginSlot = int.Parse(myReader["Slot"].ToString());
+                        detail.EndSlot = int.Parse(myReader["EndSlot"].ToString());
+                        detail.Day = int.Parse(myReader["Day"].ToString());
+                        detail.Month = int.Parse(myReader["Month"].ToString());
+                        detail.Year = int.Parse(myReader["Year"].ToString());
+
+                        details.Add(detail);
+                    }
+
+                    myReader.Close(); // Close Command
+
+                    commtest1996.Close(); // Close Database Connection
+                }
+            }
+
+            return details;
+        } //COMM Ready
 
         // Statistic Control Methods
 
@@ -372,13 +335,13 @@ namespace HairSalon_Website
         {
             List<ProductOrderCount> products = new List<ProductOrderCount>();
 
-            using (SqlConnection boothtest = new SqlConnection(DatabaseConnection))
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
             {
-                using (SqlCommand ProductsCMD = new SqlCommand("DataProductCountOrders", boothtest))
+                using (SqlCommand ProductsCMD = new SqlCommand("DataProductCountOrders", commtest1996))
                 {
                     ProductsCMD.CommandType = CommandType.StoredProcedure;
 
-                    boothtest.Open();
+                    commtest1996.Open();
 
                     SqlDataReader myReader = ProductsCMD.ExecuteReader();
 
@@ -389,7 +352,7 @@ namespace HairSalon_Website
                         ProductOrderCount product = new ProductOrderCount();
 
                         product.ProductID = int.Parse(myReader["ID"].ToString());
-                        product.ProductName = myReader["Name"].ToString();
+                        product.ProductName = myReader["ProductName"].ToString();
                         product.NoOfOrders = int.Parse(myReader["NoOfOrders"].ToString());
 
                         products.Add(product);
@@ -397,12 +360,12 @@ namespace HairSalon_Website
 
                     myReader.Close(); // Close Command
 
-                    boothtest.Close(); // Close Database Connection
+                    commtest1996.Close(); // Close Database Connection
                 }
             }
 
             return products;
-        }
+        } //COMM Ready
 
         // Method for Getting all Categories
         public static List<Category> GetCategories()
