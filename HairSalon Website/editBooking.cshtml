@@ -1,12 +1,24 @@
 ﻿@using HairSalon_Website;
 @{
-    List<Category> categories = DatabaseControl.GetCategories();
+    List<Booking> bookings = DatabaseControl.GetEditBookings("shamable@hotmail.com");
+    int times = 1;
+    int ids = 0;
+    var date = DateTime.Now;
+    string thisDate = "";
+    string bookingId = "";
 
-    string _id;
-
-    if (Session["UserID"] != null)
+    if (IsPost)
     {
-        _id = Session["UserID"].ToString();
+        string time = Request.Form["time"];
+        thisDate = Request.Form["datepicker"];
+        date = Convert.ToDateTime(thisDate);
+        bookingId = Request.Form["bookingId"];
+        if (time.Contains(":"))
+        {
+            int slot = DatabaseControl.GetBookingSlots(time);
+            DatabaseControl.EditBooking(bookingId, slot);
+            Response.Redirect("~/customerhome.cshtml");
+        }
     }
 }
 
@@ -25,7 +37,6 @@
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
     <meta name="author" content="FREEHTML5.CO" />
-
     <!--
       //////////////////////////////////////////////////////
 
@@ -49,10 +60,8 @@
     <meta name="twitter:image" content="" />
     <meta name="twitter:url" content="" />
     <meta name="twitter:card" content="" />
-
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="shortcut icon" href="favicon.ico">
-
+    <link rel="shortcut icon" href="">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 
     <!-- Animate.css -->
@@ -65,9 +74,6 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <!-- Bootstrap  -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <!-- Toastr Notifications -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
-
     <!--
     Default Theme Style
     You can change the style.css (default color purple) to one of these styles
@@ -82,14 +88,7 @@
 
     -->
     <link rel="stylesheet" href="css/style.css">
-
-    <!-- Styleswitcher ( This style is for demo purposes only, you may delete this anytime. ) -->
-    <link rel="stylesheet" id="theme-switch" href="css/style.css">
-    <!-- End demo purposes only -->
-
-
     <style>
-        /* For demo purpose only */
         button:focus,
         input:focus {
             outline: 0;
@@ -206,19 +205,18 @@
                 outline: none;
             }
 
-
-        div.fh5co-text {
+        #continueBtn, #timeSlots {
+            margin-top: 3em;
             text-align: center;
         }
     </style>
-    <!-- End demo purposes only -->
+
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
     <script src="js/respond.min.js"></script>
     <![endif]-->
-
 </head>
 <body>
     <header role="banner" id="fh5co-header">
@@ -228,12 +226,12 @@
                 <div class="navbar-header">
                     <!-- Mobile Toggle Menu Button -->
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <a class="navbar-brand" href="~/home.cshtml">Welcome  !</a>
+                    <a class="navbar-brand" href="index.html">Hair Salon</a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="~/home.cshtml"><span>Home</span></a></li>
-                        <li class="active"><a href="#" data-nav-section="work"><span>Shop</span></a></li>
+                        <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
+                        <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
                         <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
                         <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
                         <li><a href="#" data-nav-section="about"><span>About</span></a></li>
@@ -245,35 +243,86 @@
         </div>
     </header>
 
-    <!-- Dipslay Product Area -->
-    <section id="fh5co-work" data-section="work">
+
+    <section id="fh5co-work" data-section="work" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Products</h2>
+                    <h2 class="to-animate">Bookings</h2>
                 </div>
             </div>
             <div class="row row-bottom-padded-sm">
-                @foreach (Category category in categories)
+                @foreach (Booking bg in bookings)
                 {
                     <div class="col-md-4 col-sm-6 col-xxs-12">
                         <div class="fh5co-project-item">
                             <img src="images/work_1.jpg" alt="Image" class="img-responsive">
                             <div class="fh5co-text">
-                                <h2>@category.Name</h2>
+                                <h2>@bg.Procedure</h2>
+                                <span>@bg.Date.ToShortDateString() || Name: @bg.Name </span>
                             </div>
                             <div class="form-group text-center">
-                                <button class="btn btn-primary btn-sm" name="addToBasket" type="submit" onclick="BookAppointment('@category.Name')">Make Booking</button>
-                            </div>@**@
+                                <button class="btn btn-primary btn-sm" id="btn_@ids" name="addToBasket" value="@bg.Date.ToShortDateString()" type="submit" onclick="DisplayEditBooking(this.id, '@bg.ID')">Edit Booking</button>
+                            </div>
                         </div>
                     </div>
+                    ids++;
                 }
-            </div>
-            <div class="row">
             </div>
         </div>
     </section>
-    <!-- The Footer -->
+
+    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
+        <div class="gradient"></div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 section-heading text-center">
+                    <h2 class="to-animate">Edit Selected Booking</h2>
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2 subtext to-animate">
+                            <h3>Select Time of your booking</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row row-bottom-padded-md">
+                <form method="post">
+                    <div class="col-md-6 to-animate col-md-offset-3">
+                        <div class="form-group ">
+                            <label for="bookingId" class="sr-only">Booking Number</label>
+                            <input id="bookingId" class="form-control" placeholder="Booking Number" type="text" value="@bookingId" name="bookingId" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <label for="datepicker" class="sr-only">Select Date</label>
+                            <input id="datepicker" class="form-control" placeholder="Date" type="text" value="@thisDate" name="datepicker" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <label for="time" class="sr-only">Select Time</label>
+                            <input id="time" class="form-control" placeholder="Time" type="text" name="time" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <div id="continueBtn"><input id="updateTime" class="btn btn-primary btn-lg" value="Update Time Slots" type="submit"></div>
+                        </div>
+                        <div class="form-group ">
+                            <div id="timeSlots">
+                                @for (int i = 0; i < DatabaseControl.TimeSlots(Convert.ToDateTime(date)).Count; i++)
+                                {
+                                    <input id="slot_@times" class="btn btn-primary btn-lg" value="@DatabaseControl.TimeSlots(Convert.ToDateTime(date))[i]" type="button" onclick="GetTime(this.id)">
+                                    times++;
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div id="continueBtn"><input class="btn btn-primary btn-lg" value="Continue" type="submit" onclick="SetVar()" /></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="slant"></div>
+    </section>
+
+
     <footer id="footer" role="contentinfo">
         <a href="#" class="gotop js-gotop"><i class="icon-arrow-up2"></i></a>
         <div class="container">
@@ -295,43 +344,6 @@
         </div>
     </footer>
 
-    <!-- For demo purposes Only ( You may delete this anytime :-) -->
-    @*<div id="colour-variations">
-            <a class="option-toggle"><i class="icon-gear"></i></a>
-            <h3>Preset Colors</h3>
-            <ul>
-                <li>
-                    <a href="javascript: void(0);" data-theme="style">
-                        <span style="background: #3f95ea;"></span>
-                        <span style="background: #52d3aa;"></span>
-                        <span style="background: #f2f2f2;"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" data-theme="style2">
-                        <span style="background: #329998;"></span>
-                        <span style="background: #6cc99c;"></span>
-                        <span style="background: #f2f2f2;"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" data-theme="style3">
-                        <span style="background: #9f466e;"></span>
-                        <span style="background: #c24d67;"></span>
-                        <span style="background: #f2f2f2;"></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="javascript: void(0);" data-theme="style4">
-                        <span style="background: #21825C;"></span>
-                        <span style="background: #A4D792;"></span>
-                        <span style="background: #f2f2f2;"></span>
-                    </a>
-                </li>
-
-            </ul>
-        </div>*@
-    <!-- End demo purposes only -->
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- jQuery Easing -->
@@ -344,45 +356,14 @@
     <script src="js/jquery.stellar.min.js"></script>
     <!-- Counter -->
     <script src="js/jquery.countTo.js"></script>
-    <!-- booking necessary javascript code-->
-    <script src="js/programmerDefined.js"></script>
     <!-- Magnific Popup -->
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/magnific-popup-options.js"></script>
     <!-- Google Map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
     <script src="js/google_map.js"></script>
-    <!-- Toastr Notifications -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
-
-    <!-- For demo purposes only styleswitcher ( You may delete this anytime ) -->
-    <script src="js/jquery.style.switcher.js"></script>
-    <script>
-        $(function () {
-            $('#colour-variations ul').styleSwitcher({
-                defaultThemeId: 'theme-switch',
-                hasPreview: false,
-                cookie: {
-                    expires: 30,
-                    isManagingLoad: true
-                }
-            });
-            $('.option-toggle').click(function () {
-                $('#colour-variations').toggleClass('sleep');
-            });
-        });
-
-        function BookAppointment(clicked_Name) {
-            var CategoryName = clicked_Name;
-
-            sessionStorage.setItem('categoryName', JSON.stringify(CategoryName));
-
-            window.location.href = "booking.cshtml";
-        }
-    </script>
-    <!-- End demo purposes only -->
+    <script src="js/programmerDefined.js"></script>
     <!-- Main JS (Do not remove) -->
     <script src="js/main.js"></script>
-
 </body>
 </html>

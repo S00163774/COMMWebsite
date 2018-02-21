@@ -2,13 +2,38 @@
 @using System.Data
 @using HairSalon_Website;
 @{
-//User userLoggedIn = (User)Session["HairSalonUser"];
+    var message = "";
+    int times = 1;
+    List<string> timeSlots = new List<string>();
+    var date = DateTime.Now;
+    var thisDate = Convert.ToString(DateTime.Now);
+    string category = "";
 
-//if (Session["HairSalonUser"] == null)
-//{
-//    Response.Redirect("~/login.cshtml");
-//}
+    if (Session["categoryName"] != null)
+    {
+        category = (string)Session["categoryName"];
+    }
 
+    if (IsPost)
+    {
+        thisDate = Request.Form["datepicker"];
+        string time = Request.Form["time"];
+        date = Convert.ToDateTime(thisDate);
+
+        var today = DateTime.Now;
+        var dateTaken = Convert.ToDateTime(Request.Form["datepicker"]);
+
+        if (dateTaken > today && time.Contains(":"))
+        {
+            int slot = DatabaseControl.GetBookingSlots(time);
+            DatabaseControl.InsertBooking("Owen", "Baliage", slot, "shamable@hotmail.com", Convert.ToDateTime(thisDate));
+            Response.Redirect("makeBookingPage.cshtml");
+        }
+        else
+        {
+            message = "Please enter a future date and choose and time slot.";
+        }
+    }
 }
 
 <!DOCTYPE html>
@@ -77,6 +102,12 @@
 
     -->
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        #continueBtn, #timeSlots {
+            margin-top: 3em;
+            text-align: center;
+        }
+    </style>
 
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
@@ -85,7 +116,7 @@
     <script src="js/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
+<body onload="GetCategory()">
     <header role="banner" id="fh5co-header">
         <div class="container">
             <!-- <div class="row"> -->
@@ -115,52 +146,46 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Welcome, @*@userLoggedIn.UserFirstName!*@</h2>
+                    <h2 class="to-animate">Make Booking</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>From this Customer Hub you can make a New Booking, view your Previous Bookings and visit our Online Store</h3>
+                            <h3>Select Date and Time of your booking!</h3>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="slant"></div>
-    </section>
-    <section id="fh5co-intro">
-        <div class="container">
-            <div class="row row-bottom-padded-lg">
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_7.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-bulb"></i>
-                        <h2>Make a Booking</h2>
-                        <p>Make a new Booking with us</p>
-                        <p><a href="~/makeBookingPage.cshtml" class="btn btn-primary">Manage</a></p>
+            <div class="row row-bottom-padded-md">
+                <form method="post">
+                    <div class="col-md-6 to-animate col-md-offset-3">
+                        @message
+                        <div class="form-group ">
+                            <label for="datepicker" class="sr-only">Select Date</label>
+                            <input id="datepicker" class="form-control" placeholder="Date" type="date" value="@thisDate" name="datepicker" onchange="ClearTime()">
+                        </div>
+                        <div class="form-group ">
+                            <label for="time" class="sr-only">Select Time</label>
+                            <input id="time" class="form-control" type="text" name="time" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <div id="continueBtn"><input id="updateTime" class="btn btn-primary btn-lg" value="Update Time Slots" type="submit"></div>
+                        </div>
+                        <div class="form-group ">
+                            <div id="timeSlots">
+                                @for (int i = 0; i < DatabaseControl.TimeSlots(Convert.ToDateTime(date)).Count; i++)
+                                {
+                                    <input id="slot_@times" class="btn btn-primary btn-lg" value="@DatabaseControl.TimeSlots(Convert.ToDateTime(date))[i]" type="button" onclick="GetTime(this.id)">
+                                    times++;
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div id="continueBtn"><input class="btn btn-primary btn-lg" value="Continue" type="submit" onclick="SetVar()" /></div>
+                        </div>
                     </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_8.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-wrench"></i>
-                        <h2>View your Bookings</h2>
-                        <p>View your history of previous and upcoming Bookings</p>
-                        <p><a href="~/editBooking.cshtml" class="btn btn-primary">Manage</a></p>
-                    </div>
-                </div>
-                <div class="fh5co-block to-animate" style="background-image: url(images/img_10.jpg);">
-                    <div class="overlay-darker"></div>
-                    <div class="overlay"></div>
-                    <div class="fh5co-text">
-                        <i class="fh5co-intro-icon icon-rocket"></i>
-                        <h2>Store</h2>
-                        <p>Visit our Online Store</p>
-                        <p><a href="~/shop.cshtml" class="btn btn-primary">View</a></p>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
+        <div class="slant"></div>
     </section>
 
     <footer id="footer" role="contentinfo">
@@ -202,7 +227,7 @@
     <!-- Google Map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
     <script src="js/google_map.js"></script>
-
+    <script src="js/programmerDefined.js"></script>
     <!-- Main JS (Do not remove) -->
     <script src="js/main.js"></script>
 </body>

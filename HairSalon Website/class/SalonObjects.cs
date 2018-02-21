@@ -88,4 +88,31 @@ namespace HairSalon_Website
             Console.ReadKey();
         }
     }
+
+    public class Booking
+    {
+        public string Email { get; set; }
+        public string Procedure { get; set; }
+        public int Slot { get; set; }
+        public string Name { get; set; }
+        public DateTime Date { get; set; }
+        public string ID { get; set; }
+    }
+
+    public class Category
+    {
+        public string Name { get; set; }
+        public string ID { get; set; }
+
+        public Category()
+        {
+
+        }
+
+        public Category(string _name, string _id) : this()
+        {
+            this.Name = _name;
+            this.ID = _id;
+        }
+    }
 }
