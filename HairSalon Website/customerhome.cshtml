@@ -2,12 +2,12 @@
 @using System.Data
 @using HairSalon_Website;
 @{
-//User userLoggedIn = (User)Session["HairSalonUser"];
+    User userLoggedIn = (User)Session["HairSalonUser"];
 
-//if (Session["HairSalonUser"] == null)
-//{
-//    Response.Redirect("~/login.cshtml");
-//}
+    if (Session["HairSalonUser"] == null)
+    {
+        Response.Redirect("~/login.cshtml", false);
+    }
 
 }
 
@@ -115,7 +115,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Welcome, @*@userLoggedIn.UserFirstName!*@</h2>
+                    <h2 class="to-animate">Welcome, @userLoggedIn.UserFirstName!</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
                             <h3>From this Customer Hub you can make a New Booking, view your Previous Bookings and visit our Online Store</h3>
@@ -146,7 +146,7 @@
                         <i class="fh5co-intro-icon icon-wrench"></i>
                         <h2>View your Bookings</h2>
                         <p>View your history of previous and upcoming Bookings</p>
-                        <p><a href="#" class="btn btn-primary">Manage</a></p>
+                        <p><a href="~/editBooking.cshtml" class="btn btn-primary">Manage</a></p>
                     </div>
                 </div>
                 <div class="fh5co-block to-animate" style="background-image: url(images/img_10.jpg);">

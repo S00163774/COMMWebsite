@@ -170,10 +170,6 @@ function PriceGetter() {
     sessionStorage.setItem("price", JSON.stringify(price));
 }
 
-//function GetTotalPrice() {
-//    $(".btn btn-success.btn-block")
-//}
-
 function CheckoutPage() { // Sends to the checkout page
     PriceGetter();
 
@@ -244,4 +240,108 @@ function ShowDetails() {
     var postcd = details.postCode.toUpperCase();
 
     $('#shippingAddress').after('<div><strong>' + details.Name + '</strong></div> <div><strong>' + details.Address1 + '</strong></div> <div><strong>' + details.Address2 + '</strong></div> <div><strong>Sligo</strong></div> <div><strong>' + postcd + '</strong></div> <div>Ireland</div>');
+}
+
+function BookAppointment(clicked_Name) {
+    var CategoryName = clicked_Name;
+
+    sessionStorage.setItem('categoryName', JSON.stringify(CategoryName));
+
+    window.location.href = "booking.cshtml";
+}
+
+function GetTime(clicked_id) {
+    var timeSlot = document.getElementById(clicked_id).value;
+    $('#time').val(timeSlot);
+}
+
+function ClearTime() {
+    $('#time').val("");
+}
+
+function GetCategory() {
+    var category = JSON.parse(sessionStorage.getItem("categoryName"));
+
+    $('#category').val(category);
+}
+
+function DisplayEditBooking(clicked_id, id) {
+    var timeSlot = document.getElementById(clicked_id).value;
+    $('#datepicker').val(timeSlot);
+    $('#bookingId').val(id);
+}
+
+function Payment() {
+
+    GetPrice();
+    // Create a Stripe client.
+    var stripe = Stripe('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+
+    // Create an instance of Elements.
+    var elements = stripe.elements();
+
+    // Custom styling can be passed to options when creating an Element.
+    // (Note that this demo uses a wider set of styles than the guide below.)
+    var style = {
+        base: {
+            color: '#32325d',
+            lineHeight: '18px',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+                color: '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    };
+
+    // Create an instance of the card Element.
+    var card = elements.create('card', { style: style });
+
+    // Add an instance of the card Element into the `card-element` <div>.
+    card.mount('#card-element');
+
+    // Handle real-time validation errors from the card Element.
+    card.addEventListener('change', function (event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    // Handle form submission.
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                // Inform the user if there was an error.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server.
+                stripeTokenHandler(result.token);
+            }
+        });
+    });
+}
+
+function GetPrice() {
+    var price = JSON.parse(sessionStorage.getItem("price"));
+
+    $('#price').val(price);
+}
+
+function Reloader() {
+    setTimeout(function () { window.location.href = "customerhome.cshtml"; }, 10);
+
+    toastr.options = { "showMethod": "fadeIn", "hideMethod": "fadeOut", "timeOut": "3000", "closeButton": true };
+    toastr["success"]('Payment Successful!');
 }

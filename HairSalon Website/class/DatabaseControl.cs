@@ -5,7 +5,6 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
-using Stripe;
 
 namespace HairSalon_Website
 {
@@ -606,8 +605,6 @@ namespace HairSalon_Website
                 }
                 return bookings;
             }
-        }
-
-        
+        }  
     }
 }

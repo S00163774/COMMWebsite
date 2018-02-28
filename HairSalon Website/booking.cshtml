@@ -2,30 +2,37 @@
 @using System.Data
 @using HairSalon_Website;
 @{
-    Validation.Add("email", Validator.Required("Please Enter your Email"));
-    Validation.Add("password", Validator.Required("Please Enter your password"));
+    var message = "";
+    int times = 1;
+    List<string> timeSlots = new List<string>();
+    var date = DateTime.Now;
+    var thisDate = Convert.ToString(DateTime.Now);
+    User user;
 
     if (IsPost)
     {
-        User user = new User();
+        thisDate = Request.Form["datepicker"];
+        string time = Request.Form["time"];
+        string cat = Request.Form["category"];
+        date = Convert.ToDateTime(thisDate);
 
-        if (Validation.IsValid())
+        var today = DateTime.Now;
+        var dateTaken = Convert.ToDateTime(Request.Form["datepicker"]);
+
+        if (Session["HairSalonUser"] != null)
         {
-            user = DatabaseControl.LogIn(Request.Form["email"], Request.Form["password"]);
+            user = (User)Session["HairSalonUser"];
 
-            if (user.UserID != "0")
+            if (dateTaken > today && time.Contains(":"))
             {
-                Session["HairSalonUser"] = user;
+                int slot = DatabaseControl.GetBookingSlots(time);
+                DatabaseControl.InsertBooking(user.UserFirstName, cat, slot, user.UserEmail, Convert.ToDateTime(thisDate));
+                Response.Redirect("makeBookingPage.cshtml", false);
+            }
 
-                if (user.UserType == "Staff" || user.UserType == "Admin")
-                {
-                    Response.Redirect("~/adminhome.cshtml", false);
-                }
-
-                else
-                {
-                    Response.Redirect("~/customerhome.cshtml", false);
-                }
+            else
+            {
+                message = "Please enter a future date and choose and time slot.";
             }
         }
     }
@@ -97,6 +104,12 @@
 
     -->
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        #continueBtn, #timeSlots {
+            margin-top: 3em;
+            text-align: center;
+        }
+    </style>
 
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
@@ -105,7 +118,7 @@
     <script src="js/respond.min.js"></script>
     <![endif]-->
 </head>
-<body>
+<body onload="GetCategory()">
     <header role="banner" id="fh5co-header">
         <div class="container">
             <!-- <div class="row"> -->
@@ -115,7 +128,7 @@
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
                     <a class="navbar-brand" href="index.html">Hair Salon</a>
                 </div>
-                <div id="navbar" class="navbar-collapse collapse">
+                @*<div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
                         <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
                         <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
@@ -124,7 +137,7 @@
                         <li><a href="#" data-nav-section="about"><span>About</span></a></li>
                         <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
                     </ul>
-                </div>
+                </div>*@
             </nav>
             <!-- </div> -->
         </div>
@@ -135,10 +148,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Log In</h2>
+                    <h2 class="to-animate">Make Booking</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>Log In here to enter the website!</h3>
+                            <h3>Select Date and Time of your booking!</h3>
                         </div>
                     </div>
                 </div>
@@ -146,17 +159,33 @@
             <div class="row row-bottom-padded-md">
                 <form method="post">
                     <div class="col-md-6 to-animate col-md-offset-3">
-                        <h3>Log In</h3>
+                        @message
                         <div class="form-group ">
-                            <label for="email" class="sr-only">Email</label>
-                            <input id="email" class="form-control" placeholder="Email" type="email" name="email">@Html.ValidationMessage("email")
+                            <label for="category" class="sr-only">Select Date</label>
+                            <input id="category" class="form-control" type="text" style="color:black;" value="" name="category" readonly>
                         </div>
                         <div class="form-group ">
-                            <label for="password" class="sr-only">Password</label>
-                            <input id="password" class="form-control" placeholder="Password" type="password" name="password">@Html.ValidationMessage("password")
+                            <label for="datepicker" class="sr-only">Select Date</label>
+                            <input id="datepicker" class="form-control" placeholder="Date" type="date" value="@thisDate" name="datepicker" onchange="ClearTime()">
                         </div>
                         <div class="form-group ">
-                            <input class="btn btn-primary btn-lg" value="Log In" type="submit">
+                            <label for="time" class="sr-only">Select Time</label>
+                            <input id="time" class="form-control" type="text" name="time" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <div id="continueBtn"><input id="updateTime" class="btn btn-primary btn-lg" value="Update Time Slots" type="submit"></div>
+                        </div>
+                        <div class="form-group ">
+                            <div id="timeSlots">
+                                @for (int i = 0; i < DatabaseControl.TimeSlots(Convert.ToDateTime(date)).Count; i++)
+                                {
+                                    <input id="slot_@times" class="btn btn-primary btn-lg" value="@DatabaseControl.TimeSlots(Convert.ToDateTime(date))[i]" type="button" onclick="GetTime(this.id)">
+                                    times++;
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <div id="continueBtn"><input class="btn btn-primary btn-lg" value="Continue" type="submit" onclick="SetVar()" /></div>
                         </div>
                     </div>
                 </form>
@@ -204,8 +233,18 @@
     <!-- Google Map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCefOgb1ZWqYtj7raVSmN4PL2WkTrc-KyA&sensor=false"></script>
     <script src="js/google_map.js"></script>
-
+    <script src="~/js/ProgrammerDefined.js"></script>
     <!-- Main JS (Do not remove) -->
+    @*<script>
+            $(function () {
+                function GetTime(clicked_id) {
+                    var timeSlot = document.getElementById(clicked_id).value;
+
+                    alert(timeSlot);
+                    document.getElementById("time").innerHTML = timeSlot;
+                }
+            });
+        </script>*@
     <script src="js/main.js"></script>
 </body>
 </html>

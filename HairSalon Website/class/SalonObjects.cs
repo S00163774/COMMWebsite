@@ -6,6 +6,7 @@ using System.Web;
 using Twilio;
 using Twilio.Rest.Api.V2010.Account;
 using Twilio.Types;
+using Stripe;
 
 namespace HairSalon_Website
 {
@@ -63,6 +64,139 @@ namespace HairSalon_Website
         public string Address2 { get; set; }
         public string Email { get; set; }
 
+        public static void PaymentMethod(int amount, string description)
+        {
+            // var amount = 100;
+            //var payment = Stripe.StripeCharge.(amount);
+            try
+            {
+                //use nu-get Stripe
+                //set TLS 1.2 in androuid settings
+
+                StripeConfiguration.SetApiKey("sk_test_BEPrGyKARA5fbK1rcLbAixdd");
+
+                var chargeOptions = new StripeChargeCreateOptions()
+                {
+                    Amount = amount,
+                    Currency = "usd",
+                    Description = description,
+                    SourceTokenOrExistingSourceId = "tok_visa",
+                    Metadata = new Dictionary<String, String>()
+                    {
+                        { "OrderId", "6735" }
+                    }
+                };
+
+                var chargeService = new StripeChargeService();
+                StripeCharge charge = chargeService.Create(chargeOptions);
+            }
+            // Use Stripe's library to make request
+
+            catch (StripeException ex)
+            {
+                switch (ex.StripeError.ErrorType)
+                {
+                    case "card_error":
+                        System.Diagnostics.Debug.WriteLine("   Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("Message: " + ex.StripeError.Message);
+                        break;
+                    case "api_connection_error":
+                        System.Diagnostics.Debug.WriteLine(" apic  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("apic Message: " + ex.StripeError.Message);
+                        break;
+                    case "api_error":
+                        System.Diagnostics.Debug.WriteLine("api   Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("api Message: " + ex.StripeError.Message);
+                        break;
+                    case "authentication_error":
+                        System.Diagnostics.Debug.WriteLine(" auth  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("auth Message: " + ex.StripeError.Message);
+                        break;
+                    case "invalid_request_error":
+                        System.Diagnostics.Debug.WriteLine(" invreq  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("invreq Message: " + ex.StripeError.Message);
+                        break;
+                    case "rate_limit_error":
+                        System.Diagnostics.Debug.WriteLine("  rl Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("rl Message: " + ex.StripeError.Message);
+                        break;
+                    case "validation_error":
+                        System.Diagnostics.Debug.WriteLine(" val  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("val Message: " + ex.StripeError.Message);
+                        break;
+                    default:
+                        // Unknown Error Type
+                        break;
+                }
+            }
+        }
+
+        public static void PaymentMethod(int amount)
+        {
+            // var amount = 100;
+            //var payment = Stripe.StripeCharge.(amount);
+            try
+            {
+                //use nu-get Stripe
+                //set TLS 1.2 in androuid settings
+
+                StripeConfiguration.SetApiKey("sk_test_BEPrGyKARA5fbK1rcLbAixdd");
+
+                var chargeOptions = new StripeChargeCreateOptions()
+                {
+                    Amount = amount,
+                    Currency = "eur",
+                    SourceTokenOrExistingSourceId = "tok_visa",
+                    Metadata = new Dictionary<String, String>()
+                    {
+                        { "OrderId", "6735" }
+                    }
+                };
+
+                var chargeService = new StripeChargeService();
+                StripeCharge charge = chargeService.Create(chargeOptions);
+            }
+            // Use Stripe's library to make request
+
+            catch (StripeException ex)
+            {
+                switch (ex.StripeError.ErrorType)
+                {
+                    case "card_error":
+                        System.Diagnostics.Debug.WriteLine("   Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("Message: " + ex.StripeError.Message);
+                        break;
+                    case "api_connection_error":
+                        System.Diagnostics.Debug.WriteLine(" apic  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("apic Message: " + ex.StripeError.Message);
+                        break;
+                    case "api_error":
+                        System.Diagnostics.Debug.WriteLine("api   Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("api Message: " + ex.StripeError.Message);
+                        break;
+                    case "authentication_error":
+                        System.Diagnostics.Debug.WriteLine(" auth  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("auth Message: " + ex.StripeError.Message);
+                        break;
+                    case "invalid_request_error":
+                        System.Diagnostics.Debug.WriteLine(" invreq  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("invreq Message: " + ex.StripeError.Message);
+                        break;
+                    case "rate_limit_error":
+                        System.Diagnostics.Debug.WriteLine("  rl Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("rl Message: " + ex.StripeError.Message);
+                        break;
+                    case "validation_error":
+                        System.Diagnostics.Debug.WriteLine(" val  Code: " + ex.StripeError.Code);
+                        System.Diagnostics.Debug.WriteLine("val Message: " + ex.StripeError.Message);
+                        break;
+                    default:
+                        // Unknown Error Type
+                        break;
+                }
+            }
+        }
+
         public static void SendEmail(string emailUser)
         {
             MailMessage Msg = new MailMessage();
@@ -102,5 +236,21 @@ namespace HairSalon_Website
             Console.Write("Press any key to continue.");
             Console.ReadKey();
         }
+    }
+
+    public class Category
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+    }
+
+    public class Booking
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Procedure { get; set; }
+        public DateTime Date { get; set; }
+        public int Slot { get; set; }
     }
 }

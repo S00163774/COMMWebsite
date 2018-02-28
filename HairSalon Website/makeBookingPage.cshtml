@@ -1,6 +1,6 @@
 ﻿@using HairSalon_Website;
 @{
-    List<ProductCategory> categories = DatabaseControl.ReturnCategories();
+    List<Category> categories = DatabaseControl.GetCategories();
 
     string _id;
 
@@ -229,7 +229,7 @@
                 <div class="navbar-header">
                     <!-- Mobile Toggle Menu Button -->
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <a class="navbar-brand" href="~/home.cshtml">Welcome  !</a>
+                    <a class="navbar-brand" href="~/home.cshtml">Hair Salon </a>
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
@@ -255,16 +255,16 @@
                 </div>
             </div>
             <div class="row row-bottom-padded-sm">
-                @foreach (ProductCategory category in categories)
+                @foreach (Category category in categories)
                 {
                     <div class="col-md-4 col-sm-6 col-xxs-12">
                         <div class="fh5co-project-item">
                             <img src="images/work_1.jpg" alt="Image" class="img-responsive">
                             <div class="fh5co-text">
-                                <h2>@category.ProductCategoryName</h2>
+                                <h2>@category.Name</h2>
                             </div>
                             <div class="form-group text-center">
-                                <button class="btn btn-primary btn-sm" name="addToBasket" type="submit" onclick="">Make Booking</button>
+                                <button class="btn btn-primary btn-sm" name="addToBasket" type="submit" onclick="BookAppointment('@category.Name')">Make Booking</button>
                             </div>
                         </div>
                     </div>
@@ -346,7 +346,7 @@
     <!-- Counter -->
     <script src="js/jquery.countTo.js"></script>
     <!-- shop necessary javascript code-->
-    <script src="js/programmerDefined.js"></script>
+    <script src="~/js/ProgrammerDefined.js"></script>
     <!-- Magnific Popup -->
     <script src="js/jquery.magnific-popup.min.js"></script>
     <script src="js/magnific-popup-options.js"></script>
