@@ -252,5 +252,31 @@ namespace HairSalon_Website
         public string Procedure { get; set; }
         public DateTime Date { get; set; }
         public int Slot { get; set; }
+
+        public static int GetLength(string category)
+        {
+            // Variable used for returning value
+            int length;
+            // Set value for length of treatment
+            switch (category)
+            {
+                case "Perm":
+                    length = 4;
+                    break;
+
+                case "Colour":
+                    length = 2;
+                    break;
+
+                case "Baliage":
+                    length = 6;
+                    break;
+                default:
+                    length = 0;
+                    break;
+            }
+            // Return value
+            return length;
+        }
     }
 }

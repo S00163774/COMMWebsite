@@ -477,6 +477,7 @@ namespace HairSalon_Website
         static public int InsertBooking(string Name, string Category, int Slot, string email, DateTime date)
         {
             int result = 0;
+            int length = Booking.GetLength(Category);
             using (SqlConnection db = new SqlConnection(Db))
             {
                 using (SqlCommand InsertBookingCMD = new SqlCommand("InsertBooking", db))
@@ -495,8 +496,11 @@ namespace HairSalon_Website
                     SqlParameter inputProcedure = InsertBookingCMD.Parameters.Add("@EProcedure", SqlDbType.NVarChar, 50);
                     inputProcedure.Direction = ParameterDirection.Input;
 
-                    SqlParameter InputDate = InsertBookingCMD.Parameters.Add("@EDate", SqlDbType.DateTime);
-                    InputDate.Direction = ParameterDirection.Input;
+                    SqlParameter inputDate = InsertBookingCMD.Parameters.Add("@EDate", SqlDbType.DateTime);
+                    inputDate.Direction = ParameterDirection.Input;
+
+                    SqlParameter inputLength = InsertBookingCMD.Parameters.Add("@ELength", SqlDbType.Int);
+                    inputLength.Direction = ParameterDirection.Input;
 
                     SqlParameter Result = InsertBookingCMD.Parameters.Add("Result", SqlDbType.Bit);
                     Result.Direction = ParameterDirection.ReturnValue;
@@ -504,8 +508,9 @@ namespace HairSalon_Website
                     inputEmail.Value = email;
                     inputName.Value = Name;
                     inputSlot.Value = Slot;
+                    inputLength.Value = length;
                     inputProcedure.Value = Category;
-                    InputDate.Value = date;
+                    inputDate.Value = date;
 
                     db.Open();
 
@@ -606,5 +611,10 @@ namespace HairSalon_Website
                 return bookings;
             }
         }  
+
+        //public static List<User> GetStylists()
+        //{
+
+        //}
     }
 }
