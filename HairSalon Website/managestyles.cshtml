@@ -11,50 +11,28 @@
     }
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    List<Product> products = DatabaseControl.ReturnProducts();
+    List<Category> categories = DatabaseControl.ReturnCategories();
 
-    int productAdded = 0;
-    int productEdited = 0;
+    int styleAdded = 0;
 
     if (IsPost)
     {
-        if (Request.Form["SubmitProduct"] != null)
+        if (Request.Form["SubmitStyle"] != null)
         {
-            Validation.Add("ProductName", Validator.Required("Please Enter Product Name"));
-            Validation.Add("ProductPrice", Validator.Required("Please Enter Product Price"));
-            Validation.Add("ProductStock", Validator.Required("Please Enter Product Initial Stock"));
-            Validation.Add("ProductURL", Validator.Required("Please Enter Product Image URL"));
+            Validation.Add("CategoryName", Validator.Required("Please Enter Style Name"));
+            Validation.Add("Length", Validator.Required("Please Enter Style Duration"));
 
             if (Validation.IsValid())
             {
-                productAdded = DatabaseControl.InsertProduct(Request.Form["ProductName"], Convert.ToDouble(Request.Form["ProductPrice"]), Convert.ToInt32(Request.Form["ProductStock"]), Request.Form["ProductURL"]);
-                products = DatabaseControl.ReturnProducts();
+                styleAdded = DatabaseControl.InsertCategory(Request.Form["CategoryName"], Convert.ToDouble(Request.Form["Length"]));
+                categories = DatabaseControl.ReturnCategories();
             }
 
-            if (productAdded == 1)
+            if (styleAdded == 1)
             {
 
             }
         }
-
-        if (Request.Form["SaveEditProduct"] != null)
-        {
-            Validation.Add("ProductName", Validator.Required("Please Enter Product Name"));
-            Validation.Add("ProductPrice", Validator.Required("Please Enter Product Price"));
-            Validation.Add("ProductStock", Validator.Required("Please Enter Product Stock"));
-
-            if (Validation.IsValid())
-            {
-                productEdited = DatabaseControl.EditProduct(Request.Form["ProductID"], Request.Form["ProductName"], Convert.ToDouble(Request.Form["ProductPrice"]), Convert.ToDouble(Request.Form["ProductStock"]));
-                products = DatabaseControl.ReturnProducts();
-            }
-
-            if (productEdited == 1)
-            {
-
-            }
-        }
-
     }
 }
 
@@ -164,28 +142,27 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Manage Products</h2>
+                    <h2 class="to-animate">Manage Styles</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>Add, Remove or Edit Products for the Online Store</h3>
+                            <h3>Add or Remove Styles</h3>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row row-bottom-padded-md">
                 <div class="col-md-6 to-animate">
-                    <h3>Products</h3>
-                    @foreach (Product product in products)
+                    <h3>Styles</h3>
+                    @foreach (Category category in categories)
                     {
                         <div class="col-md-4 col-sm-6 col-xxs-12">
                             <div class="fh5co-project-item">
-                                <img src="@product.ProductURL" alt="Image" class="img-responsive">
+                                <img src="~/images/work_1.jpg" alt="Image" class="img-responsive">
                                 <div class="fh5co-text">
-                                    <h2>@product.ProductName</h2>
+                                    <h2>@category.Name</h2>
                                 </div>
                                 <div class="form-group text-center">
-                                    <input id="@product.ToString()" class="btn btn-primary btn-sm" name="EditProduct" value="Edit" type="button" onclick="EditProduct(this.id)">
-                                    <button class="btn btn-primary btn-sm" name="DeleteProduct" value="" type="submit"><i class="fh5co-intro-icon icon-close"></i></button>
+                                    <button class="btn btn-primary btn-sm" name="DeleteStyle" value="" type="submit"><i class="fh5co-intro-icon icon-close"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -194,27 +171,17 @@
 
                 <form method="post">
                     <div class="col-md-6 to-animate">
-                        <h3 id="productFormHeading">Add New Product</h3>
-                        <input type="hidden" name="ProductID" value="" />
+                        <h3>Add New Style</h3>
                         <div class="form-group ">
                             <label for="name" class="sr-only">Name</label>
-                            <input id="name" class="form-control" placeholder="Name" type="text" name="ProductName" value="">@Html.ValidationMessage("ProductName")
+                            <input id="name" class="form-control" placeholder="Name" type="text" name="CategoryName" value="">@Html.ValidationMessage("CategoryName")
                         </div>
                         <div class="form-group ">
-                            <label for="price" class="sr-only">Price</label>
-                            <input id="price" class="form-control" placeholder="Price" type="text" name="ProductPrice" value="">@Html.ValidationMessage("ProductPrice")
+                            <label for="length" class="sr-only">Length</label>
+                            <input id="length" class="form-control" placeholder="Length" type="text" name="Length" value="">@Html.ValidationMessage("Length")
                         </div>
                         <div class="form-group ">
-                            <label for="stock" class="sr-only">Initial Stock</label>
-                            <input id="stock" class="form-control" placeholder="Stock" type="text" name="ProductStock" value="">@Html.ValidationMessage("ProductStock")
-                        </div>
-                        <div class="form-group ">
-                            <label for="url" class="sr-only">Image URL</label>
-                            <input id="url" class="form-control" placeholder="URL//" type="text" name="ProductURL" value="">@Html.ValidationMessage("ProductURL")
-                        </div>
-                        <div class="form-group ">
-                            <input class="btn btn-primary btn-lg" name="SubmitProduct" value="Add Product" type="submit" >
-                            <input class="btn btn-primary btn-lg" name="SaveEditProduct" value="Save Changes" type="submit" onclick="SaveDelay()">
+                            <input class="btn btn-primary btn-lg" name="SubmitStyle" value="Add Style" type="submit">
                         </div>
                     </div>
                 </form>
@@ -266,11 +233,7 @@
     <!-- Toastr Notifications -->
     <script src="js/toastr.min.js"></script>
 
-    <!--My JS Code-->
-    <script src="~/js/editform.js"></script>
-
     <!-- Main JS (Do not remove) -->
     <script src="js/main.js"></script>
 </body>
 </html>
-

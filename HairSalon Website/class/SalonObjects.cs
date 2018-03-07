@@ -12,11 +12,16 @@ namespace HairSalon_Website
 {
     public class Product
     {
-        public int ProductID { get; set; }
+        public string ProductID { get; set; }
         public string ProductName { get; set; }
         public double ProductPrice { get; set; }
-        public int ProductStock { get; set; }
+        public double ProductStock { get; set; }
         public string ProductURL { get; set; }
+
+        public override string ToString()
+        {
+            return this.ProductID + "," + this.ProductName + "," + this.ProductPrice + "," + this.ProductStock;
+        }
     }
 
     public class User
@@ -242,6 +247,7 @@ namespace HairSalon_Website
     {
         public string ID { get; set; }
         public string Name { get; set; }
+        public double Length { get; set; }
     }
 
     public class Booking

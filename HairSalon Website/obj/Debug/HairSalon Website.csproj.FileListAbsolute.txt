@@ -415,3 +415,4 @@ C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\System.Web.Web
 C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\Twilio.xml
 C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\obj\Debug\HairSalon Website.csprojResolveAssemblyReference.cache
 C:\Users\s00163169\Source\Repos\WebsiteTest\HairSalon Website\bin\Stripe.net.dll
+C:\Users\Conor\Desktop\WebsiteTest\HairSalon Website\bin\Stripe.net.dll

@@ -44,10 +44,10 @@ namespace HairSalon_Website
                     {
                         Product product = new Product();
 
-                        product.ProductID = int.Parse(myReader["ID"].ToString());
+                        product.ProductID = myReader["ID"].ToString();
                         product.ProductName = myReader["ProductName"].ToString();
                         product.ProductPrice = double.Parse(myReader["Price"].ToString());
-                        product.ProductStock = int.Parse(myReader["Quantity"].ToString());
+                        product.ProductStock = double.Parse(myReader["Quantity"].ToString());
                         product.ProductURL = myReader["imageURL"].ToString();
 
                         products.Add(product);
@@ -87,6 +87,50 @@ namespace HairSalon_Website
                     SqlParameter ProductURL = ProductCMD.Parameters.Add("@ProductURL", SqlDbType.NVarChar, 400);
                     ProductURL.Direction = ParameterDirection.Input;
                     ProductURL.Value = url;
+
+                    SqlParameter Result = ProductCMD.Parameters.Add("Result", SqlDbType.Bit);
+                    Result.Direction = ParameterDirection.ReturnValue;
+
+                    commtest1996.Open();
+
+                    SqlDataReader myReader = ProductCMD.ExecuteReader();
+
+                    result = Convert.ToInt32(Result.Value);
+
+                    myReader.Close(); // Close Command
+
+                    commtest1996.Close(); // Close Database Connection
+                }
+            }
+
+            return result;
+        } //COMM Ready
+
+        static public int EditProduct(string id, string name, double price, double stock)
+        {
+            int result = 0;
+
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
+            {
+                using (SqlCommand ProductCMD = new SqlCommand("EditProduct", commtest1996))
+                {
+                    ProductCMD.CommandType = CommandType.StoredProcedure;
+
+                    SqlParameter ProductID = ProductCMD.Parameters.Add("@ProductID", SqlDbType.NVarChar, 255);
+                    ProductID.Direction = ParameterDirection.Input;
+                    ProductID.Value = id;
+
+                    SqlParameter ProductName = ProductCMD.Parameters.Add("@ProductName", SqlDbType.NChar, 15);
+                    ProductName.Direction = ParameterDirection.Input;
+                    ProductName.Value = name;
+
+                    SqlParameter ProductPrice = ProductCMD.Parameters.Add("@ProductPrice", SqlDbType.Float);
+                    ProductPrice.Direction = ParameterDirection.Input;
+                    ProductPrice.Value = price;
+
+                    SqlParameter ProductStock = ProductCMD.Parameters.Add("@ProductStock", SqlDbType.Float);
+                    ProductStock.Direction = ParameterDirection.Input;
+                    ProductStock.Value = stock;
 
                     SqlParameter Result = ProductCMD.Parameters.Add("Result", SqlDbType.Bit);
                     Result.Direction = ParameterDirection.ReturnValue;
@@ -287,6 +331,78 @@ namespace HairSalon_Website
 
             return emailExists;
         } //COMM Ready
+
+        static public List<Category> ReturnCategories()
+        {
+            List<Category> categories = new List<Category>();
+
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
+            {
+                using (SqlCommand CategoriesCMD = new SqlCommand("ReturnCategoriesLength", commtest1996))
+                {
+                    CategoriesCMD.CommandType = CommandType.StoredProcedure;
+
+                    commtest1996.Open();
+
+                    SqlDataReader myReader = CategoriesCMD.ExecuteReader();
+
+                    categories = new List<Category>();
+
+                    while (myReader.Read())
+                    {
+                        Category category = new Category();
+
+                        category.ID = myReader["id"].ToString();
+                        category.Name = myReader["CategoryName"].ToString();
+                        category.Length = Convert.ToDouble(myReader["Length"].ToString());
+
+                        categories.Add(category);
+                    }
+
+                    myReader.Close(); // Close Command
+
+                    commtest1996.Close(); // Close Database Connection
+                }
+            }
+
+            return categories;
+        }
+
+        static public int InsertCategory(string name, double length)
+        {
+            int result = 0;
+
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
+            {
+                using (SqlCommand CategoryCMD = new SqlCommand("InsertCategory", commtest1996))
+                {
+                    CategoryCMD.CommandType = CommandType.StoredProcedure;
+
+                    SqlParameter CategoryName = CategoryCMD.Parameters.Add("@CategoryName", SqlDbType.NVarChar, 255);
+                    CategoryName.Direction = ParameterDirection.Input;
+                    CategoryName.Value = name;
+
+                    SqlParameter Length = CategoryCMD.Parameters.Add("@Length", SqlDbType.Float);
+                    Length.Direction = ParameterDirection.Input;
+                    Length.Value = length;
+
+                    SqlParameter Result = CategoryCMD.Parameters.Add("Result", SqlDbType.Bit);
+                    Result.Direction = ParameterDirection.ReturnValue;
+
+                    commtest1996.Open();
+
+                    SqlDataReader myReader = CategoryCMD.ExecuteReader();
+
+                    result = Convert.ToInt32(Result.Value);
+
+                    myReader.Close(); // Close Command
+
+                    commtest1996.Close(); // Close Database Connection
+                }
+            }
+
+            return result;
+        }
 
         static public List<TimetableDetails> TimetableDetails()
         {
