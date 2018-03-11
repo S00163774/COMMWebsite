@@ -1,29 +1,29 @@
 ﻿@using HairSalon_Website;
 @{
-    var thisDate = "";
-    string message = "";
-    string stylist = "";
+    int times = 1;
+    List<string> timeSlots = new List<string>();
 
-    List<User> users = DatabaseControl.GetStylists();
+    string thisDate = (string)Session["date"];
+
+    string stylist = (string)Session["stylist"];
+
+    User user = (User)Session["HairSalonUser"];
 
     if (IsPost)
     {
         thisDate = Request.Form["datepicker"];
-        stylist = Request.Form["stylist"];
-
-        Session["stylist"] = stylist;
-        Session["date"] = thisDate;
+        string time = Request.Form["time"];
+        string categoryName = Request.Form["categoryName"];
 
         var today = DateTime.Now;
         var dateTaken = Convert.ToDateTime(Request.Form["datepicker"]);
 
-        if (thisDate == DateTime.Now.ToShortDateString())
+        if (dateTaken > today && time.Contains(":"))
         {
-            message = "Please select future date";
-        }
-        else
-        {
-            Response.Redirect("timeChoose.cshtml", false);
+            int slot = DatabaseControl.GetBookingSlots(time);
+            DatabaseControl.InsertBooking(user.UserFirstName, categoryName, slot, user.UserEmail, Convert.ToDateTime(thisDate), stylist);
+            Checkout.SendEmail(user.UserEmail);
+            Response.Redirect("makeBookingPage.cshtml", false);
         }
     }
 }
@@ -80,8 +80,6 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <!-- Bootstrap  -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <!-- Fotorama slideshow -->
-    <link rel="stylesheet" href="~/css/fotorama.css" type="text/css">
     <!--
     Default Theme Style
     You can change the style.css (default color purple) to one of these styles
@@ -97,18 +95,9 @@
     -->
     <link rel="stylesheet" href="css/style.css">
     <style>
-        #continueBtn {
+        #continueBtn, #timeSlots {
             margin-top: 3em;
             text-align: center;
-        }
-
-        .slideshow {
-            margin: 0 auto;
-            max-height: 200px;
-        }
-
-        footer {
-            max-height: 100px;
         }
     </style>
 
@@ -119,7 +108,7 @@
     <script src="js/respond.min.js"></script>
     <![endif]-->
 </head>
-<body onload="GetCategory()">
+<body onload="GetCatName()">
     <header role="banner" id="fh5co-header">
         <div class="container">
             <!-- <div class="row"> -->
@@ -152,26 +141,38 @@
                     <h2 class="to-animate">Make Booking</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>Select Stylist and Time of your booking!</h3>
+                            <h3>Select Time of your booking!</h3>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="slideshow">
-                <div class="row row-bottom-padded-md">
-                </div>
+            <div class="row row-bottom-padded-md">
                 <form method="post">
                     <div class="col-md-6 to-animate col-md-offset-3">
-                        @message
-
-                        @foreach (User user in users)
-                        {
-                            <input type="radio" name="stylist" value="@user.UserFirstName"> @user.UserFirstName
-                        }
-
+                        <div class="form-group ">
+                            <label for="stylist" class="sr-only">Select Date</label>
+                            <input id="stylist" class="form-control" type="text" value="@stylist" name="stylist" readonly>
+                        </div>
                         <div class="form-group ">
                             <label for="datepicker" class="sr-only">Select Date</label>
-                            <input id="datepicker" class="form-control" placeholder="Date" type="date" value="@thisDate" name="datepicker" onchange="ClearTime()">
+                            <input id="datepicker" class="form-control" type="text" value="@thisDate" name="datepicker" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <label for="categoryName" class="sr-only">Select Date</label>
+                            <input id="categoryName" class="form-control" type="text" value="" name="categoryName" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <label for="time" class="sr-only">Select Date</label>
+                            <input id="time" class="form-control" placeholder="Date" type="text" value="" name="time" readonly>
+                        </div>
+                        <div class="form-group ">
+                            <div id="timeSlots">
+                                @for (int i = 0; i < DatabaseControl.TimeSlots(Convert.ToDateTime(thisDate)).Count; i++)
+                                {
+                                    <input id="slot_@times" class="btn btn-primary btn-lg" value="@DatabaseControl.TimeSlots(Convert.ToDateTime(thisDate))[i]" type="button" onclick="GetTime(this.id)">
+                                    times++;
+                                }
+                            </div>
                         </div>
                         <div class="form-group ">
                             <div id="continueBtn"><input class="btn btn-primary btn-lg" value="Continue" type="submit" onclick="SetVar()" /></div>
@@ -180,11 +181,11 @@
                 </form>
             </div>
         </div>
-        @*<div class="slant"></div>*@
+        <div class="slant"></div>
     </section>
 
     <footer id="footer" role="contentinfo">
-        @*<a href="#" class="gotop js-gotop"><i class="icon-arrow-up2"></i></a>*@
+        <a href="#" class="gotop js-gotop"><i class="icon-arrow-up2"></i></a>
         <div class="container">
             <div class="">
                 <div class="col-md-12 text-center">
@@ -194,11 +195,11 @@
             </div>
             <div class="row">
                 <div class="col-md-12 text-center">
-                    @*<ul class="social social-circle">
-                            <li><a href="#"><i class="icon-twitter"></i></a></li>
-                            <li><a href="#"><i class="icon-facebook"></i></a></li>
-                            <li><a href="#"><i class="icon-youtube"></i></a></li>
-                        </ul>*@
+                    <ul class="social social-circle">
+                        <li><a href="#"><i class="icon-twitter"></i></a></li>
+                        <li><a href="#"><i class="icon-facebook"></i></a></li>
+                        <li><a href="#"><i class="icon-youtube"></i></a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -237,3 +238,4 @@
     <script src="js/main.js"></script>
 </body>
 </html>
+

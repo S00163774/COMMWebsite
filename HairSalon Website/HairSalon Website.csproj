@@ -176,6 +176,7 @@
     <Content Include="editBooking.cshtml" />
     <Content Include="booking.cshtml" />
     <Content Include="managestyles.cshtml" />
+    <Content Include="timeChoose.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

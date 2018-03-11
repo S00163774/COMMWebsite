@@ -590,10 +590,9 @@ namespace HairSalon_Website
             return times;
         }
 
-        static public int InsertBooking(string Name, string Category, int Slot, string email, DateTime date)
+        static public int InsertBooking(string Name, string Category, int Slot, string email, DateTime date, string stylist)
         {
             int result = 0;
-            int length = Booking.GetLength(Category);
             using (SqlConnection db = new SqlConnection(Db))
             {
                 using (SqlCommand InsertBookingCMD = new SqlCommand("InsertBooking", db))
@@ -612,11 +611,11 @@ namespace HairSalon_Website
                     SqlParameter inputProcedure = InsertBookingCMD.Parameters.Add("@EProcedure", SqlDbType.NVarChar, 50);
                     inputProcedure.Direction = ParameterDirection.Input;
 
-                    SqlParameter inputDate = InsertBookingCMD.Parameters.Add("@EDate", SqlDbType.DateTime);
-                    inputDate.Direction = ParameterDirection.Input;
+                    SqlParameter inputStylist = InsertBookingCMD.Parameters.Add("@EStylist", SqlDbType.NVarChar, 50);
+                    inputStylist.Direction = ParameterDirection.Input;
 
-                    SqlParameter inputLength = InsertBookingCMD.Parameters.Add("@ELength", SqlDbType.Int);
-                    inputLength.Direction = ParameterDirection.Input;
+                    SqlParameter InputDate = InsertBookingCMD.Parameters.Add("@EDate", SqlDbType.DateTime);
+                    InputDate.Direction = ParameterDirection.Input;
 
                     SqlParameter Result = InsertBookingCMD.Parameters.Add("Result", SqlDbType.Bit);
                     Result.Direction = ParameterDirection.ReturnValue;
@@ -624,9 +623,9 @@ namespace HairSalon_Website
                     inputEmail.Value = email;
                     inputName.Value = Name;
                     inputSlot.Value = Slot;
-                    inputLength.Value = length;
                     inputProcedure.Value = Category;
-                    inputDate.Value = date;
+                    inputStylist.Value = stylist;
+                    InputDate.Value = date;
 
                     db.Open();
 
@@ -726,7 +725,45 @@ namespace HairSalon_Website
                 }
                 return bookings;
             }
-        }  
+        }
+
+        public static List<User> GetStylists()
+        {
+            List<User> user = new List<User>();
+
+            string db = ConfigurationManager.ConnectionStrings["Connection"].ConnectionString;
+
+            using (SqlConnection boothtest = new SqlConnection(db))
+            {
+                using (SqlCommand ProductsCMD = new SqlCommand("GetStylists", boothtest))
+                {
+                    ProductsCMD.CommandType = CommandType.StoredProcedure;
+
+                    boothtest.Open();
+
+                    SqlDataReader myReader = ProductsCMD.ExecuteReader();
+
+                    user = new List<User>();
+
+                    while (myReader.Read())
+                    {
+                        User product = new User
+                        {
+                            UserID = myReader["id"].ToString(),
+                            UserFirstName = myReader["StylistName"].ToString(),
+                        };
+                        //product.ProductCategoryID = int.Parse(myReader["ProductCategoryID"].ToString());
+
+                        user.Add(product);
+                    }
+
+                    myReader.Close();
+                    boothtest.Close();
+
+                    return user;
+                }
+            }
+        }
 
         //public static List<User> GetStylists()
         //{

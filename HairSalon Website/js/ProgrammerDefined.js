@@ -242,33 +242,8 @@ function ShowDetails() {
     $('#shippingAddress').after('<div><strong>' + details.Name + '</strong></div> <div><strong>' + details.Address1 + '</strong></div> <div><strong>' + details.Address2 + '</strong></div> <div><strong>Sligo</strong></div> <div><strong>' + postcd + '</strong></div> <div>Ireland</div>');
 }
 
-function BookAppointment(clicked_Name) {
-    var CategoryName = clicked_Name;
-
-    sessionStorage.setItem('categoryName', JSON.stringify(CategoryName));
-
-    window.location.href = "booking.cshtml";
-}
-
-function GetTime(clicked_id) {
-    var timeSlot = document.getElementById(clicked_id).value;
-    $('#time').val(timeSlot);
-}
-
 function ClearTime() {
     $('#time').val("");
-}
-
-function GetCategory() {
-    var category = JSON.parse(sessionStorage.getItem("categoryName"));
-
-    $('#category').val(category);
-}
-
-function DisplayEditBooking(clicked_id, id) {
-    var timeSlot = document.getElementById(clicked_id).value;
-    $('#datepicker').val(timeSlot);
-    $('#bookingId').val(id);
 }
 
 function Payment() {
@@ -344,4 +319,41 @@ function Reloader() {
 
     toastr.options = { "showMethod": "fadeIn", "hideMethod": "fadeOut", "timeOut": "3000", "closeButton": true };
     toastr["success"]('Payment Successful!');
+}
+
+function SetBooking(name) {
+
+    sessionStorage.setItem("name", JSON.stringify(name));
+
+    window.location.href = "pay.cshtml";
+}
+
+function GetTime(clicked_id) {
+    var timeSlot = document.getElementById(clicked_id).value;
+    $('#time').val(timeSlot);
+}
+
+function GetCategory() {
+    var category = sessionStorage.getItem("name");
+
+    $('div h3').append('<p><strong>' + JSON.parse(category) + '</strong></p>');
+}
+
+function GetCatName() {
+    var category = sessionStorage.getItem("name").toString();
+    category = JSON.parse(category);
+    $('#categoryName').val(category);
+}
+
+function DisplayEditBooking(clicked_id, id) {
+    var timeSlot = document.getElementById(clicked_id).value;
+    $('#datepicker').val(timeSlot);
+    $('#bookingId').val(id);
+}
+
+function SetVar() {
+
+    var stylist = $('input[name=stylist]:checked').val();
+
+    sessionStorage.setItem('stylist', JSON.stringify(stylist));
 }

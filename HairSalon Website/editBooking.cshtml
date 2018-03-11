@@ -1,6 +1,8 @@
 ﻿@using HairSalon_Website;
 @{
-    List<Booking> bookings = DatabaseControl.GetEditBookings("shamable@hotmail.com");
+    User user = (User)Session["HairSalonUser"];
+
+    List<Booking> bookings = DatabaseControl.GetEditBookings(user.UserEmail);
     int times = 1;
     int ids = 0;
     var date = DateTime.Now;
@@ -262,6 +264,7 @@
                             </div>
                             <div class="form-group text-center">
                                 <button class="btn btn-primary btn-sm" id="btn_@ids" name="addToBasket" value="@bg.Date.ToShortDateString()" type="submit" onclick="DisplayEditBooking(this.id, '@bg.ID')">Edit Booking</button>
+                                <button class="btn btn-primary btn-sm" name="pQuantity" onclick="" type="button"><i class="glyphicon glyphicon-trash"></i></button>
                             </div>
                         </div>
                     </div>
@@ -366,4 +369,3 @@
     <script src="js/main.js"></script>
 </body>
 </html>
-
