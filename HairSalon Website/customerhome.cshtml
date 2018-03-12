@@ -6,7 +6,7 @@
 
     if (Session["HairSalonUser"] == null)
     {
-        Response.Redirect("~/login.cshtml", false);
+        Response.Redirect("~/login.cshtml");
     }
 
 }
@@ -88,29 +88,21 @@
 <body>
     <header role="banner" id="fh5co-header">
         <div class="container">
-            <!-- <div class="row"> -->
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
-                    <!-- Mobile Toggle Menu Button -->
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <a class="navbar-brand" href="index.html">Hair Salon</a>
+                    <img class="navbar-brand" href="~/adminhub.cshtml" src="~/images/header.png" />
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
-                        <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
-                        <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
-                        <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
-                        <li><a href="#" data-nav-section="about"><span>About</span></a></li>
-                        <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
+                        <li><a href="~/login.cshtml"><span>Log Out</span></a></li>
                     </ul>
                 </div>
             </nav>
-            <!-- </div> -->
         </div>
     </header>
 
-    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
+    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/layerbackground1.png);" data-stellar-background-ratio="0.5">
         <div class="gradient"></div>
         <div class="container">
             <div class="row">

@@ -205,6 +205,15 @@
         <div class="slant"></div>
     </section>
 
+    @using (Html.BeginForm("UploadAsync", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="fileUpload btn btn-default">
+            <span>Select Files</span><input type="file" id="file" name="selectFiles" class="upload" onchange="DisplayFilesToUpload()" multiple />
+        </div>
+        @* This gets populated from the DisplayFilesToUpload() JS function*@
+        <p id="FilesToUpload"></p>
+    }
+
     <footer id="footer" role="contentinfo">
         <a href="#" class="gotop js-gotop"><i class="icon-arrow-up2"></i></a>
         <div class="container">

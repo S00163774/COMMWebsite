@@ -3,7 +3,7 @@ var numoOfStylists = document.getElementsByName("Stylist").length;
 var stylists = [];
 
 var timetable = new Timetable();
-timetable.setScope(9, 18);
+timetable.setScope(9, 22);
 
 for (i = 0; i < numoOfStylists; i++)
 {

@@ -8,6 +8,7 @@
     {
         _id = Session["UserID"].ToString();
     }
+
 }
 
 <!DOCTYPE html>
@@ -223,34 +224,26 @@
 <body>
     <header role="banner" id="fh5co-header">
         <div class="container">
-            <!-- <div class="row"> -->
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
-                    <!-- Mobile Toggle Menu Button -->
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <a class="navbar-brand" href="~/home.cshtml">Welcome  !</a>
+                    <img class="navbar-brand" href="~/adminhub.cshtml" src="~/images/header.png" />
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="~/home.cshtml"><span>Home</span></a></li>
-                        <li class="active"><a href="#" data-nav-section="work"><span>Shop</span></a></li>
-                        <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
-                        <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
-                        <li><a href="#" data-nav-section="about"><span>About</span></a></li>
-                        <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
+                        <li><a href="~/login.cshtml"><span>Log Out</span></a></li>
                     </ul>
                 </div>
             </nav>
-            <!-- </div> -->
         </div>
     </header>
 
     <!-- Dipslay Product Area -->
-    <section id="fh5co-work" data-section="work">
+    <section id="fh5co-work" data-section="work" style="background-image: url(images/layerbackground1.png);">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">Products</h2>
+                    <h2 class="to-animate">Treatments</h2>
                 </div>
             </div>
             <div class="row row-bottom-padded-sm">
