@@ -1,24 +1,9 @@
-﻿@using System.Data.SqlClient;
-@using System.Data
-@using HairSalon_Website;
-@{
-    User userLoggedIn = (User)Session["HairSalonUser"];
-
-    if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
-    {
-        //Response.Redirect("~/login.cshtml");
-    }
-
-    string orderno = DatabaseControl.GenerateCoupon(8);
-
-}
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>DoOrDye &mdash; View Customer Images</title>
+    <title>Elate &mdash; 100% Free Fully Responsive HTML5 Template by FREEHTML5.co</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -72,11 +57,12 @@
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <img class="navbar-brand" href="~/adminhub.cshtml" src="~/images/header.png" />
+                    <img class="navbar-brand" href="#" src="images/header.png" />
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="~/login.cshtml"><span>Log Out</span></a></li>
+                        <li><a href="~/register.cshtml"><span>Register</span></a></li>
+                        <li><a href="~/login.cshtml"><span>Log In</span></a></li>
                     </ul>
                 </div>
             </nav>
@@ -88,75 +74,74 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">View Store Orders</h2>
+                    <h2 class="to-animate">Welcome!</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>Here you can view details about the orders placed in the store</h3>
+                            <h3>Get Started here by Signing up or Logging In</h3>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="slant"></div>
-    </section>
+            <div class="row">
+                <div class="text-center subtext to-animate">
+                    <input class="btn btn-primary btn-lg" value="Log In" type="submit" onclick="location.href = '/login.cshtml';">
+                </div>
+            </div>
+            <div class="row homebutton">
+                <div class="text-center subtext to-animate">
+                    <input class="btn btn-primary btn-lg" value="Register" type="submit" onclick="location.href = '/register.cshtml';">
+                </div>
+            </div>
 
-    <section id="fh5co-testimonials" data-section="testimonials">
-        <div class="container">
             <div class="row">
                 <div class="col-md-12 section-heading text-center">
-                    <h2 class="to-animate">@orderno</h2>
+                    <h2 class="to-animate">Get In Touch</h2>
                     <div class="row">
                         <div class="col-md-8 col-md-offset-2 subtext to-animate">
-                            <h3>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.</h3>
+                            <h3>Get in contact with us here</h3>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="box-testimony">
-                        <blockquote class="to-animate-2">
-                            <p>&ldquo;Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.&rdquo;</p>
-                        </blockquote>
-                        <div class="author to-animate">
-                            <figure><img src="images/person1.jpg" alt="Person"></figure>
-                            <p>
-                                Jean Doe, CEO <a href="http://freehtml5.co/" target="_blank">FREEHTML5.co</a> <span class="subtext">Creative Director</span>
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="box-testimony">
-                        <blockquote class="to-animate-2">
-                            <p>&ldquo;Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts.&rdquo;</p>
-                        </blockquote>
-                        <div class="author to-animate">
-                            <figure><img src="images/person2.jpg" alt="Person"></figure>
-                            <p>
-                                John Doe, Senior UI <a href="http://freehtml5.co/" target="_blank">FREEHTML5.co</a> <span class="subtext">Creative Director</span>
-                            </p>
-                        </div>
-                    </div>
+            <div class="row row-bottom-padded-md">
+                <div class="col-md-6 to-animate">
+                    <h3>Contact Info</h3>
+                    <ul class="fh5co-contact-info">
+                        <li class="fh5co-contact-address ">
+                            <i class="icon-home"></i>
+                            5555 Love Paradise 56 New Clity 5655, <br>Excel Tower United Kingdom
+                        </li>
+                        <li><i class="icon-phone"></i> (123) 465-6789</li>
+                        <li><i class="icon-envelope"></i>info@freehtml5.co</li>
+                        <li><i class="icon-globe"></i> <a href="http://freehtml5.co/" target="_blank">freehtml5.co</a></li>
+                    </ul>
                 </div>
 
-                <div class="col-md-4">
-                    <div class="box-testimony">
-                        <blockquote class="to-animate-2">
-                            <p>&ldquo;Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. &rdquo;</p>
-                        </blockquote>
-                        <div class="author to-animate">
-                            <figure><img src="images/person3.jpg" alt="Person"></figure>
-                            <p>
-                                Chris Nash, Director <a href="http://freehtml5.co/" target="_blank">FREEHTML5.co</a> <span class="subtext">Creative Director</span>
-                            </p>
-                        </div>
+                <div class="col-md-6 to-animate">
+                    <h3>Contact Form</h3>
+                    <div class="form-group ">
+                        <label for="name" class="sr-only">Name</label>
+                        <input id="name" class="form-control" placeholder="Name" type="text">
+                    </div>
+                    <div class="form-group ">
+                        <label for="email" class="sr-only">Email</label>
+                        <input id="email" class="form-control" placeholder="Email" type="email">
+                    </div>
+                    <div class="form-group ">
+                        <label for="phone" class="sr-only">Phone</label>
+                        <input id="phone" class="form-control" placeholder="Phone" type="text">
+                    </div>
+                    <div class="form-group ">
+                        <label for="message" class="sr-only">Message</label>
+                        <textarea name="" id="message" cols="30" rows="5" class="form-control" placeholder="Message"></textarea>
+                    </div>
+                    <div class="form-group ">
+                        <input class="btn btn-primary btn-lg" value="Send Message" type="submit">
                     </div>
                 </div>
-
-
             </div>
         </div>
+        <div id="map" class="to-animate"></div>
     </section>
 
     <footer id="footer" role="contentinfo">

@@ -5,6 +5,7 @@ using System.Web;
 using System.Data.SqlClient;
 using System.Data;
 using System.Configuration;
+using System.Text;
 
 namespace HairSalon_Website
 {
@@ -796,5 +797,20 @@ namespace HairSalon_Website
         //{
 
         //}
+
+        // Code to Generate a random string from user Guffa on codereview.stackexhange
+        // https://codereview.stackexchange.com/questions/5983/random-string-generation
+        // https://codereview.stackexchange.com/a/5994
+        public static string GenerateCoupon(int length)
+        {
+            Random random = new Random();
+            string characters = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            StringBuilder result = new StringBuilder(length);
+            for (int i = 0; i < length; i++)
+            {
+                result.Append(characters[random.Next(characters.Length)]);
+            }
+            return result.ToString();
+        }
     }
 }

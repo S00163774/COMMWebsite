@@ -172,6 +172,7 @@
     <Content Include="favicon.ico" />
     <Content Include="images\header.png" />
     <Content Include="images\layerbackground2.png" />
+    <Content Include="index.html" />
     <Content Include="js\editform.js" />
     <Content Include="js\ProgrammerDefined.js" />
     <Content Include="js\statistics.js" />

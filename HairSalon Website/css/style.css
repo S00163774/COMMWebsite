@@ -39,6 +39,10 @@ p {
     margin-bottom: 1.5em;
 }
 
+#fh5co-testimonials h2, #fh5co-testimonials h3 {
+    color: #444;
+}
+
 h1, h2, h3, h4, h5, h6 {
     color: #000;
     font-family: "Source Sans Pro", Arial, sans-serif;
@@ -1036,6 +1040,18 @@ label {
             background: #52d3aa;
         }
 
+    #fh5co-contact .section-heading h3 {
+        color: #ffffff;
+    }
+
+    #fh5co-contact .section-heading h2 {
+        color: #fff;
+    }
+
+        #fh5co-contact .section-heading h2:after {
+            background: #52d3aa;
+        }
+
     #fh5co-work .section-heading h3 {
         color: #ffffff;
     }
@@ -1214,12 +1230,16 @@ option {
                 top: .2em;
                 left: 0;
             }
+            
+.homebutton {
+    padding-top: 10px;
+    margin-bottom: 50px;
+}
 
 .section-heading {
     float: left;
     width: 100%;
     padding-bottom: 50px;
-    margin-bottom: 50px;
     clear: both;
 }
 
@@ -1261,6 +1281,69 @@ option {
 
 @media screen and (max-width: 768px) {
     .section-heading h2 {
+        font-size: 30px;
+    }
+}
+
+.section-heading h3 {
+    font-weight: 300;
+    line-height: 1.5;
+    color: #ffffff;
+}
+
+@media screen and (max-width: 768px) {
+    .section-heading h3 {
+        font-size: 24px !important;
+        line-height: 34px;
+    }
+}
+
+.section-heading-home {
+    float: left;
+    width: 100%;
+    padding-bottom: 50px;
+    margin-bottom: 50px;
+    clear: both;
+}
+
+    .section-heading-home h2 {
+        margin: 0 0 30px 0;
+        font-size: 50px;
+        font-weight: 300;
+        color: #ffffff;
+        text-transform: uppercase;
+        position: relative;
+        display: block;
+        padding-bottom: 20px;
+        line-height: 1.5;
+    }
+
+        .section-heading-home h2.left-border:after {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: #52d3aa;
+            left: 0%;
+            margin-left: 0px;
+            bottom: 0;
+        }
+
+        .section-heading-home h2:after {
+            content: "";
+            position: absolute;
+            display: block;
+            width: 80px;
+            height: 2px;
+            background: #52d3aa;
+            left: 50%;
+            margin-left: -40px;
+            bottom: 0;
+        }
+
+@media screen and (max-width: 768px) {
+    .section-heading-home h2 {
         font-size: 30px;
     }
 }
