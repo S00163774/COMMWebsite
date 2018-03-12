@@ -325,7 +325,7 @@ function SetBooking(name) {
 
     sessionStorage.setItem("name", JSON.stringify(name));
 
-    window.location.href = "pay.cshtml";
+    window.location.href = "booking.cshtml";
 }
 
 function GetTime(clicked_id) {
