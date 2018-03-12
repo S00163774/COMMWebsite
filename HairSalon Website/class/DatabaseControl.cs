@@ -473,6 +473,44 @@ namespace HairSalon_Website
             }
         } //COMM Ready
 
+        static public List<StoreOrderDetails> ReturnStoreOrders()
+        {
+            List<StoreOrderDetails> details = new List<StoreOrderDetails>();
+
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
+            {
+                using (SqlCommand ProductsCMD = new SqlCommand("ReturnStoreOrders", commtest1996))
+                {
+                    ProductsCMD.CommandType = CommandType.StoredProcedure;
+
+                    commtest1996.Open();
+
+                    SqlDataReader myReader = ProductsCMD.ExecuteReader();
+
+                    details = new List<StoreOrderDetails>();
+
+                    while (myReader.Read())
+                    {
+                        StoreOrderDetails detail = new StoreOrderDetails();
+
+                        detail.OrderNo = myReader["OrderNo"].ToString();
+                        detail.OrderDate = Convert.ToDateTime(myReader["OrderDate"].ToString());
+                        detail.ProductName = myReader["ProductName"].ToString();
+                        detail.Quantity = myReader["Quantity"].ToString();
+                        detail.UserName = myReader["UserName"].ToString();
+
+                        details.Add(detail);
+                    }
+
+                    myReader.Close(); // Close Command
+
+                    commtest1996.Close(); // Close Database Connection
+                }
+            }
+
+            return details;
+        } //COMM Ready
+
         // Statistic Control Methods
 
         static public List<ProductOrderCount> ProductOrderCount()

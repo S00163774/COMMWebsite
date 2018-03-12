@@ -60,6 +60,15 @@ namespace HairSalon_Website
         }
     }
 
+    public class StoreOrderDetails
+    {
+        public string OrderNo { get; set; }
+        public DateTime OrderDate { get; set; }
+        public string ProductName { get; set; }
+        public string Quantity { get; set; }
+        public string UserName { get; set; }
+    }
+
     public class Checkout
     {
         public string Name { get; set; }
