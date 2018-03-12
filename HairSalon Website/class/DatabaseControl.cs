@@ -282,7 +282,7 @@ namespace HairSalon_Website
             return stylists;
         } //COMM Ready
 
-        static public string InsertStylist(string firstname, string surname, string mobilenumber, string email, string password, string url)
+        static public string InsertStylist(string firstname, string surname, string mobilenumber, string email, string password)
         {
             string emailExists = null;
 
@@ -445,6 +445,33 @@ namespace HairSalon_Website
             return details;
         } //COMM Ready
 
+        static public void DeleteItem(string id, string item)
+        {
+            using (SqlConnection commtest1996 = new SqlConnection(CommDatabaseConnection))
+            {
+                using (SqlCommand DeleteCMD = new SqlCommand("DeleteItem", commtest1996))
+                {
+                    DeleteCMD.CommandType = CommandType.StoredProcedure;
+
+                    SqlParameter ID = DeleteCMD.Parameters.Add("@ID", SqlDbType.NVarChar, 255);
+                    ID.Direction = ParameterDirection.Input;
+                    ID.Value = id;
+
+                    SqlParameter Item = DeleteCMD.Parameters.Add("@Item", SqlDbType.NVarChar, 255);
+                    Item.Direction = ParameterDirection.Input;
+                    Item.Value = item;
+
+                    commtest1996.Open();
+
+                    SqlDataReader myReader = DeleteCMD.ExecuteReader();
+
+                    myReader.Close(); // Close Command
+
+                    commtest1996.Close(); // Close Database Connection
+                }
+            }
+        } //COMM Ready
+
         // Statistic Control Methods
 
         static public List<ProductOrderCount> ProductOrderCount()
@@ -469,7 +496,7 @@ namespace HairSalon_Website
 
                         product.ProductID = int.Parse(myReader["ID"].ToString());
                         product.ProductName = myReader["ProductName"].ToString();
-                        product.NoOfOrders = int.Parse(myReader["NoOfOrders"].ToString());
+                        product.NoOfOrders = myReader["NoOfOrders"].ToString();
 
                         products.Add(product);
                     }

@@ -7,7 +7,7 @@
 
     if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
     {
-        //Response.Redirect("~/login.cshtml");
+        Response.Redirect("~/login.cshtml");
     }
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -55,20 +55,21 @@
             }
         }
 
+        if (Request.Form["DeleteProduct"] != null)
+        {
+            DatabaseControl.DeleteItem(Request.Form["ItemToDelete"], "Product");
+            products = DatabaseControl.ReturnProducts();
+        }
     }
 }
 
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
 <html class="no-js">
-<!--<![endif]-->
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Elate &mdash; 100% Free Fully Responsive HTML5 Template by FREEHTML5.co</title>
+    <title>DoOrDye &mdash; Manage Products</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -112,54 +113,31 @@
     <link rel="stylesheet" href="css/bootstrap.css">
     <!-- Toastr Style Sheet -->
     <link rel="stylesheet" href="css/toastr.min.css">
-    <!--
-    Default Theme Style
-    You can change the style.css (default color purple) to one of these styles
 
-    1. pink.css
-    2. blue.css
-    3. turquoise.css
-    4. orange.css
-    5. lightblue.css
-    6. brown.css
-    7. green.css
-
-    -->
     <link rel="stylesheet" href="css/style.css">
-    <!-- End demo purposes only -->
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
-    <!-- FOR IE9 below -->
-    <!--[if lt IE 9]>
-    <script src="js/respond.min.js"></script>
-    <![endif]-->
 </head>
+
 <body>
+
     <header role="banner" id="fh5co-header">
         <div class="container">
-            <!-- <div class="row"> -->
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
-                    <!-- Mobile Toggle Menu Button -->
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <a class="navbar-brand" href="index.html">Hair Salon</a>
+                    <img class="navbar-brand" href="~/adminhub.cshtml" src="~/images/header.png" />
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-right">
-                        <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
-                        <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
-                        <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
-                        <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
-                        <li><a href="#" data-nav-section="about"><span>About</span></a></li>
-                        <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
+                        <li><a href="~/login.cshtml"><span>Log Out</span></a></li>
                     </ul>
                 </div>
             </nav>
-            <!-- </div> -->
         </div>
     </header>
 
-    <section id="fh5co-work" data-section="work" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
+    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/layerbackground2.png);" data-stellar-background-ratio="0.5">
         <div class="gradient"></div>
         <div class="container">
             <div class="row">
@@ -179,13 +157,16 @@
                     {
                         <div class="col-md-4 col-sm-6 col-xxs-12">
                             <div class="fh5co-project-item">
-                                <img src="@product.ProductURL" alt="Image" class="img-responsive">
+                                <img src="~/images/work_7.jpg" alt="Image" class="img-responsive">
                                 <div class="fh5co-text">
                                     <h2>@product.ProductName</h2>
                                 </div>
                                 <div class="form-group text-center">
                                     <input id="@product.ToString()" class="btn btn-primary btn-sm" name="EditProduct" value="Edit" type="button" onclick="EditProduct(this.id)">
-                                    <button class="btn btn-primary btn-sm" name="DeleteProduct" value="" type="submit"><i class="fh5co-intro-icon icon-close"></i></button>
+                                    <form id="deleteform" method="post">
+                                        <button class="btn btn-primary btn-sm" name="DeleteProduct" value="" type="submit"><i class="fh5co-intro-icon icon-close"></i></button>
+                                        <input type="hidden" name="ItemToDelete" value="@product.ProductID" />
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -197,23 +178,23 @@
                         <h3 id="productFormHeading">Add New Product</h3>
                         <input type="hidden" name="ProductID" value="" />
                         <div class="form-group ">
-                            <label for="name" class="sr-only">Name</label>
+                            <label for="name" class="">Name</label>
                             <input id="name" class="form-control" placeholder="Name" type="text" name="ProductName" value="">@Html.ValidationMessage("ProductName")
                         </div>
-                        <div class="form-group ">
-                            <label for="price" class="sr-only">Price</label>
+                        <div class="form-group">
+                            <label for="price" class="">Price</label>
                             <input id="price" class="form-control" placeholder="Price" type="text" name="ProductPrice" value="">@Html.ValidationMessage("ProductPrice")
                         </div>
                         <div class="form-group ">
-                            <label for="stock" class="sr-only">Initial Stock</label>
+                            <label id="stocklabel" for="stock" class="">Initial Stock</label>
                             <input id="stock" class="form-control" placeholder="Stock" type="text" name="ProductStock" value="">@Html.ValidationMessage("ProductStock")
                         </div>
-                        <div class="form-group ">
-                            <label for="url" class="sr-only">Image URL</label>
+                        <div class="form-group">
+                            <label id="urllabel" for="url" class="">Image URL</label>
                             <input id="url" class="form-control" placeholder="URL//" type="text" name="ProductURL" value="">@Html.ValidationMessage("ProductURL")
                         </div>
-                        <div class="form-group ">
-                            <input class="btn btn-primary btn-lg" name="SubmitProduct" value="Add Product" type="submit" >
+                        <div class="form-group">
+                            <input class="btn btn-primary btn-lg" name="SubmitProduct" value="Add Product" type="submit">
                             <input class="btn btn-primary btn-lg" name="SaveEditProduct" value="Save Changes" type="submit" onclick="SaveDelay()">
                         </div>
                     </div>
@@ -245,6 +226,34 @@
         </div>
     </footer>
 
+    <script> // Script for Blob Storage
+        //Calls async Task<ActionResult> DeleteImage(string name) in the HomeController and Refreshes the page
+        function deleteImage(item) {
+            var url = "/Home/DeleteImage";
+            $.post(url, { Name: item }, function (data) {
+                window.location.href = "/Home/Index";
+            });
+        }
+
+        //Lists the file name and size for all files to be uploaded by updating the <p id="FilesToUpload"></p> control
+        function DisplayFilesToUpload() {
+            var element = document.getElementById("file");
+            var html = "";
+
+            html = "<h3>Image(s) to Upload</h3>"
+            for (var i = 0; i < element.files.length; i++) {
+                html += "<strong>" + (i + 1) + "</strong>. File: ";
+                var file = element.files[i];
+                if ('name' in file) { html += file.name + " ("; }
+                if ('size' in file) { html += "size: " + file.size + " bytes)<br>"; }
+            }
+
+            html += "<div class='fileUpload btn btn-default'><span>Upload</span><input type='submit' class='upload' value='Upload'/></div>"
+            document.getElementById("FilesToUpload").innerHTML = html;
+        }
+
+    </script>
+
     <!-- jQuery -->
     <script src="js/jquery.min.js"></script>
     <!-- jQuery Easing -->
@@ -265,12 +274,10 @@
     <script src="js/google_map.js"></script>
     <!-- Toastr Notifications -->
     <script src="js/toastr.min.js"></script>
-
     <!--My JS Code-->
     <script src="~/js/editform.js"></script>
-
     <!-- Main JS (Do not remove) -->
     <script src="js/main.js"></script>
 </body>
-</html>
 
+</html>

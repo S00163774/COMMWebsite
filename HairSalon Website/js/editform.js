@@ -12,13 +12,15 @@ function EditProduct(productDetails) {
     document.getElementById("name").value = product[1];
     document.getElementById("price").value = product[2];
     document.getElementById("stock").value = product[3];
-    
-    document.getElementById("url").disabled = true;
+
+    document.getElementById("url").style.visibility = 'hidden';
+    document.getElementById("urllabel").style.visibility = 'hidden';
     
     saveeditproduct.disabled = false;
     submitproduct.disabled = true;
 
     document.getElementById("productFormHeading").innerHTML = "Edit Product";
+    document.getElementById("stocklabel").innerHTML = "Updated Stock";
 }
 
 function SaveDelay() {
@@ -32,10 +34,17 @@ function SaveChanges() {
     document.getElementById("price").value = "";
     document.getElementById("stock").value = "";
 
-    document.getElementById("url").disabled = false;
+    document.getElementById("url").style.visibility = 'visible';
+    document.getElementById("urllabel").style.visibility = 'hidden';
 
     saveeditproduct.disabled = true;
     submitproduct.disabled = false;
 
     document.getElementById("productFormHeading").innerHTML = "Add New Product";
+    document.getElementById("stocklabel").innerHTML = "Initial Stock";
+}
+
+function DeleteItem() {
+    alert("Delete function called");
+    document.getElementById("deletevalue").value = "delete";
 }

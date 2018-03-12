@@ -6,29 +6,19 @@
 
     if (Session["HairSalonUser"] == null || userLoggedIn.UserType == "Customer")
     {
-        Response.Redirect("~/login.cshtml");
+        //Response.Redirect("~/login.cshtml");
     }
 
     List<ProductOrderCount> products = DatabaseControl.ProductOrderCount();
-    int totalOrders = 0;
-    foreach (ProductOrderCount product in products)
-    {
-        totalOrders += product.NoOfOrders;
-    }
-
 }
 
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
+
 <html class="no-js">
-<!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Elate &mdash; 100% Free Fully Responsive HTML5 Template by FREEHTML5.co</title>
+    <title>DoOrDye &mdash; Statistics</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="Free HTML5 Template by FREEHTML5.CO" />
     <meta name="keywords" content="free html5, free template, free bootstrap, html5, css3, mobile first, responsive" />
@@ -56,7 +46,7 @@
     <meta name="twitter:image" content="" />
     <meta name="twitter:url" content="" />
     <meta name="twitter:card" content="" />
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
     <link rel="shortcut icon" href="">
     <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600,400italic,700' rel='stylesheet' type='text/css'>
 
@@ -70,54 +60,32 @@
     <link rel="stylesheet" href="css/magnific-popup.css">
     <!-- Bootstrap  -->
     <link rel="stylesheet" href="css/bootstrap.css">
-    <!--
-    Default Theme Style
-    You can change the style.css (default color purple) to one of these styles
 
-    1. pink.css
-    2. blue.css
-    3. turquoise.css
-    4. orange.css
-    5. lightblue.css
-    6. brown.css
-    7. green.css
-
-    -->
     <link rel="stylesheet" href="css/style.css">
 
     <!-- Modernizr JS -->
     <script src="js/modernizr-2.6.2.min.js"></script>
-    <!-- FOR IE9 below -->
-    <!--[if lt IE 9]>
-    <script src="js/respond.min.js"></script>
-    <![endif]-->
+
 </head>
 <body>
+
     <header role="banner" id="fh5co-header">
         <div class="container">
-            <!-- <div class="row"> -->
             <nav class="navbar navbar-default">
                 <div class="navbar-header">
-                    <!-- Mobile Toggle Menu Button -->
                     <a href="#" class="js-fh5co-nav-toggle fh5co-nav-toggle" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar"><i></i></a>
-                    <a class="navbar-brand" href="index.html">Hair Salon</a>
+                    <img class="navbar-brand" href="~/adminhub.cshtml" src="~/images/header.png" />
                 </div>
-                @*<div id="navbar" class="navbar-collapse collapse">
-                        <ul class="nav navbar-nav navbar-right">
-                            <li class="active"><a href="#" data-nav-section="home"><span>Home</span></a></li>
-                            <li><a href="#" data-nav-section="work"><span>Work</span></a></li>
-                            <li><a href="#" data-nav-section="testimonials"><span>Testimonials</span></a></li>
-                            <li><a href="#" data-nav-section="services"><span>Services</span></a></li>
-                            <li><a href="#" data-nav-section="about"><span>About</span></a></li>
-                            <li><a href="#" data-nav-section="contact"><span>Contact</span></a></li>
-                        </ul>
-                    </div>*@
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="~/login.cshtml"><span>Log Out</span></a></li>
+                    </ul>
+                </div>
             </nav>
-            <!-- </div> -->
         </div>
     </header>
 
-    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/purple.jpg);" data-stellar-background-ratio="0.5">
+    <section id="fh5co-contact" data-section="contact" style="background-image: url(images/layerbackground2.png);" data-stellar-background-ratio="0.5">
         <div class="gradient"></div>
         <div class="container">
             <div class="row">
@@ -127,19 +95,55 @@
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div id="ProductOrderCountChart" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto"></div>
+            </div>
         </div>
         <div class="slant"></div>
     </section>
-    <section id="fh5co-intro">
+
+    <section id="fh5co-counters" style="background-image: url(images/layerbackground2.png);" data-stellar-background-ratio="0.5">
+        <div class="fh5co-overlay"></div>
         <div class="container">
-
-                <div id="ProductOrderCountChart" style="min-width: 310px; height: 400px; max-width: 1000px; margin: 0 auto"></div>
-
+            <div class="row">
+                <div class="col-md-12 section-heading text-center to-animate">
+                    <h2>Fun Facts</h2>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="fh5co-counter to-animate">
+                        <i class="fh5co-counter-icon icon-briefcase to-animate-2"></i>
+                        <span class="fh5co-counter-number js-counter" data-from="0" data-to="89" data-speed="5000" data-refresh-interval="50">89</span>
+                        <span class="fh5co-counter-label">Finished projects</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="fh5co-counter to-animate">
+                        <i class="fh5co-counter-icon icon-code to-animate-2"></i>
+                        <span class="fh5co-counter-number js-counter" data-from="0" data-to="2343409" data-speed="5000" data-refresh-interval="50">2343409</span>
+                        <span class="fh5co-counter-label">Line of codes</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="fh5co-counter to-animate">
+                        <i class="fh5co-counter-icon icon-cup to-animate-2"></i>
+                        <span class="fh5co-counter-number js-counter" data-from="0" data-to="1302" data-speed="5000" data-refresh-interval="50">1302</span>
+                        <span class="fh5co-counter-label">Cup of coffees</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6 col-xs-12">
+                    <div class="fh5co-counter to-animate">
+                        <i class="fh5co-counter-icon icon-people to-animate-2"></i>
+                        <span class="fh5co-counter-number js-counter" data-from="0" data-to="52" data-speed="5000" data-refresh-interval="50">52</span>
+                        <span class="fh5co-counter-label">Happy clients</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     @*ProductOrderCount*@
-    <input type="hidden" id="totalOrders" value="@totalOrders" />
     @foreach (ProductOrderCount product in products)
     {
         <input type="hidden" name="ProductOrderCount" value="@product.ToString()" />

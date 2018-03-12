@@ -9,7 +9,7 @@ namespace HairSalon_Website
     {
         public int ProductID { get; set; }
         public string ProductName { get; set; }
-        public int NoOfOrders { get; set; }
+        public string NoOfOrders { get; set; }
 
         public override string ToString()
         {
