@@ -533,7 +533,7 @@ namespace HairSalon_Website
                     {
                         ProductOrderCount product = new ProductOrderCount();
 
-                        product.ProductID = int.Parse(myReader["ID"].ToString());
+                        product.ProductID = myReader["ID"].ToString());
                         product.ProductName = myReader["ProductName"].ToString();
                         product.NoOfOrders = myReader["NoOfOrders"].ToString();
 

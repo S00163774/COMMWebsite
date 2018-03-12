@@ -7,7 +7,7 @@ namespace HairSalon_Website
 {
     public class ProductOrderCount
     {
-        public int ProductID { get; set; }
+        public string ProductID { get; set; }
         public string ProductName { get; set; }
         public string NoOfOrders { get; set; }
 
